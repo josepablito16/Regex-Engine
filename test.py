@@ -19,6 +19,14 @@ def is_dot(char):
     return char == '.'
 
 
+def is_open_alternate(char):
+    return char == '('
+
+
+def is_close_alternate(char):
+    return char == ')'
+
+
 def is_open_set(char):
     return char == '['
 
@@ -29,15 +37,23 @@ def is_close_set(char):
 
 # retorna si es numero o digito True
 def is_literal(char):
-    return char.isalpha() or char.isdigit()
+    return char.isalpha() or char.isdigit() or char in [' ']
 
 
 def is_set(term):
     return is_open_set(term[0]) and is_close_set(term[-1])
 
 
+def is_alternate(term):
+    return is_open_alternate(term[0]) and is_close_alternate(term[-1])
+
+
 def is_unit(term):
     return is_literal(term[0]) or is_dot(term[0]) or is_set(term)
+
+
+def split_alternate(alternate):
+    return alternate[1: -1].split('|')
 
 
 def split_set(set_head):
@@ -58,7 +74,11 @@ def split_expr(expr):
 	'''
     if is_open_set(expr[0]):
         last_expr_pos = expr.find(']') + 1
-        head = expr[0: last_expr_pos]
+        head = expr[: last_expr_pos]
+    elif is_open_alternate(expr[0]):
+        last_expr_pos = expr.find(')') + 1
+        head = expr[:last_expr_pos]
+
     else:
         last_expr_pos = 1
         head = expr[0]
@@ -76,6 +96,8 @@ def does_unit_match(expr, string):
     # verifica si el primer caracter concuerda
     head, operator, rest = split_expr(expr)
 
+    if len(string) == 0:
+        return False
     if is_literal(head):
         return expr[0] == string[0]
     elif is_dot(head):
@@ -134,6 +156,19 @@ def match_plus(expr, string, match_length):
 def match_question(expr, string, match_length):
     return match_multiple(expr, string, match_length, 0, 1)
 
+
+def match_alternate(expr, string, match_length):
+    head, operator, rest = split_expr(expr)
+    options = split_alternate(head)
+
+    for option in options:
+        [matched, new_match_length] = match_expr(
+            option + rest, string, match_length
+        )
+        if matched:
+            return [matched, new_match_length]
+    return [False, None]
+
     # Verifica si una palabra concuerda con el
     # lenguaje generado por una expresion regular
 
@@ -150,6 +185,8 @@ def match_expr(expr, string, match_length=0):
         return match_plus(expr, string, match_length)
     elif is_question(operator):
         return match_question(expr, string, match_length)
+    elif is_alternate(head):
+        return match_alternate(expr, string, match_length)
     elif is_unit(head):
         # Si el primer caracter concuerda, extraemos ese caracter
         # y volvemos a llamar a la funcion
@@ -188,10 +225,10 @@ def main():
     return
     '''
     # Expresion regular
-    expr = 'a[123]*c'
+    expr = '(b|b)*abb(a|b)*'
 
     # Palabra que deseamos ver si concuerda
-    string = 'a12321321321321321321321321321c'
+    string = 'babbaaaaa'
     [matched, match_pos, match_length] = match(expr, string)
 
     if (matched):

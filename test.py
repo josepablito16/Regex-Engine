@@ -15,6 +15,10 @@ def is_operator(char):
     return is_star(char) or is_plus(char) or is_question(char)
 
 
+def is_dot(char):
+    return char == '.'
+
+
 def is_open_set(char):
     return char == '['
 
@@ -33,7 +37,7 @@ def is_set(term):
 
 
 def is_unit(term):
-    return is_literal(term[0]) or is_set(term)
+    return is_literal(term[0]) or is_dot(term[0]) or is_set(term)
 
 
 def split_set(set_head):
@@ -55,7 +59,7 @@ def split_expr(expr):
     if is_open_set(expr[0]):
         last_expr_pos = expr.find(']') + 1
         head = expr[0: last_expr_pos]
-    elif is_literal(expr[0]):
+    else:
         last_expr_pos = 1
         head = expr[0]
 
@@ -74,6 +78,8 @@ def does_unit_match(expr, string):
 
     if is_literal(head):
         return expr[0] == string[0]
+    elif is_dot(head):
+        return True
     elif is_set(head):
         set_terms = split_set(head)
         return string[0] in set_terms
@@ -81,15 +87,70 @@ def does_unit_match(expr, string):
     return False
 
 
-# Verifica si una palabra concuerda con el
-# lenguaje generado por una expresion regular
+def match_multiple(expr, string, match_length, min_match_length=None, max_match_length=None):
+    head, operator, rest = split_expr(expr)
+
+    if not min_match_length:
+        min_match_length = 0
+
+    submatch_length = -1
+
+    # Encuentra la longitud de la  cadena maxima
+    while not max_match_length or (submatch_length < max_match_length):
+        # head * n es una expansion
+        [subexpr_matched, subexpr_length] = match_expr(
+            (head * (submatch_length + 1)), string, match_length
+        )
+
+        if subexpr_matched:
+            submatch_length += 1
+        else:
+            break
+
+    # si submatch_length es -1 no entra
+    # Se retorna a la funcion match_expr sabiendo
+    # submatch_length para expandir head y concatenar
+    # rest
+    while submatch_length >= min_match_length:
+        [matched, new_match_length] = match_expr(
+            (head * submatch_length) + rest, string, match_length
+        )
+
+        if matched:
+            return [matched, new_match_length]
+        submatch_length -= 1
+
+    return [False, None]
+
+
+def match_star(expr, string, match_length):
+    return match_multiple(expr, string, match_length, None, None)
+
+
+def match_plus(expr, string, match_length):
+    return match_multiple(expr, string, match_length, 1, None)
+
+
+def match_question(expr, string, match_length):
+    return match_multiple(expr, string, match_length, 0, 1)
+
+    # Verifica si una palabra concuerda con el
+    # lenguaje generado por una expresion regular
+
+
 def match_expr(expr, string, match_length=0):
     if (len(expr) == 0):
         return [True, match_length]
 
     head, operator, rest = split_expr(expr)
 
-    if is_unit(head):
+    if is_star(operator):
+        return match_star(expr, string, match_length)
+    elif is_plus(operator):
+        return match_plus(expr, string, match_length)
+    elif is_question(operator):
+        return match_question(expr, string, match_length)
+    elif is_unit(head):
         # Si el primer caracter concuerda, extraemos ese caracter
         # y volvemos a llamar a la funcion
         if (does_unit_match(expr, string)):
@@ -127,10 +188,10 @@ def main():
     return
     '''
     # Expresion regular
-    expr = '[Hh][Ee]llo'
+    expr = 'a[123]*c'
 
     # Palabra que deseamos ver si concuerda
-    string = 'HEllo'
+    string = 'a12321321321321321321321321321c'
     [matched, match_pos, match_length] = match(expr, string)
 
     if (matched):

@@ -4,5 +4,5 @@ from Arbol import *
 
 a = Arbol()
 
-entrada = "(((a|b)*ε).b)"
+entrada = "(a|b)*abb"
 a.interpretarEcuacion(entrada)

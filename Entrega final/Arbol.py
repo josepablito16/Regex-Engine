@@ -1,6 +1,6 @@
 from Nodo import Node
 from itertools import product
-#from Preprocesador import preProcesarExpresion
+from Preprocesador import preProcesarExpresion
 import numpy as np
 
 
@@ -12,14 +12,6 @@ class Arbol(object):
         self.operadores = ['|', '*','.']
         self.numeros = ['a', 'b','ε']
         self.diccionario = {}
-
-
-    def isNumber(self, item):
-        try:
-            float(item)
-            return True
-        except:
-            return False
 
 
     def postOrder(self, Node):
@@ -79,6 +71,8 @@ class Arbol(object):
         # print(self.ecuacion)
 
     def interpretarEcuacion(self, entrada):
+        entrada = preProcesarExpresion(entrada)
+        print(entrada)
         root = Node(None)
         actual = root
 

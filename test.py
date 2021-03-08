@@ -225,10 +225,10 @@ def main():
     return
     '''
     # Expresion regular
-    expr = '(b|b)*abb(a|b)*'
+    expr = 'Yo soy (hombre|mujer)*'
 
     # Palabra que deseamos ver si concuerda
-    string = 'babbaaaaa'
+    string = 'Yo soy mujerhombre asdfasdfladf;ad'
     [matched, match_pos, match_length] = match(expr, string)
 
     if (matched):

@@ -85,6 +85,31 @@ def construirKleen(NFA1):
     return NFA
 
 
+def construirConcatenacion(NFA1, NFA2):
+    # Se crea el NFA
+    NFA = {}
+
+    # Se actualizan los ids del NFA2
+    idContador = max(NFA1.keys())
+    NFA2, idContador = actualizarIdsNodos(NFA2, idContador)
+
+    # Se obtiene el estado final de NFA1
+    idFinal1, NFA1 = getIdFinal(NFA1)
+
+    # Se obtiene el estado inicial de NFA2
+    idInicial2, NFA2 = getIdInicial(NFA2)
+
+    # Join de NFAs
+    NFA.update(NFA1)
+    NFA.update(NFA2)
+
+    print(NFA)
+    NFA = mergeEstados(NFA, idFinal1, idInicial2)
+    print(NFA)
+
+    # Merge estados
+    return NFA
+
 
     
 
@@ -97,4 +122,11 @@ if __name__ == '__main__':
     NFAOR = construirOr(NFA1, NFA2)
 
     NFAKleen = construirKleen(NFAOR)
-    visualizarNFA(NFAKleen)
+
+    NFA3 = construirUnSimbolo("b")
+
+    concatenacion1 = construirConcatenacion(NFAKleen, NFA3)
+
+    NFA4 = construirUnSimbolo("b")
+
+    visualizarNFA(construirConcatenacion(concatenacion1, NFA4))

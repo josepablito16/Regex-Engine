@@ -7,6 +7,9 @@ class NodoThompson(object):
     def agregarRelacion(self,nuevaRelacion):
         self.relaciones.append(nuevaRelacion)
     
+    def setRelaciones(self, relacionesObjeto):
+        self.relaciones = relacionesObjeto
+    
     def isEstadoFinal(self):
         return self.estadoFinal
     
@@ -16,6 +19,13 @@ class NodoThompson(object):
     def clearEstado(self):
         self.estadoFinal = False
         self.estadoInicial = False
+    
+    def setEstados(estadoInicial, estadoFinal):
+        self.estadoFinal = estadoFinal
+        self.estadoInicial = estadoInicial
+    
+    def getRelacionesObjeto(self):
+        return self.relaciones
     
     def getRelaciones(self):
         relacionesList = []
@@ -83,6 +93,39 @@ def getIdFinal(NFA):
         if (nodo.isEstadoFinal()):
             nodo.clearEstado()
             return id, NFA
+
+def actualizarRelacionConcatenacion(NFA, idNodo1, idNodo2):
+    for id, nodo in NFA.items():
+        try:
+            nodo.actualizarRelaciones({idNodo2 : idNodo1})
+        except:
+            pass
+    return NFA
+
+
+def mergeEstados(NFA, idNodo1, idNodo2):
+    # Dejar id de nodo1
+    # Dejar relaciones de nodo2
+
+    NFAnuevo={}
+
+    for id, nodo in NFA.items():
+        if (id == idNodo1 or id == idNodo2):
+            pass
+        else:
+            NFAnuevo[id] = nodo
+    
+    NFAnuevo[idNodo1] = NodoThompson(False, False)
+    NFAnuevo[idNodo1].setRelaciones(NFA[idNodo2].getRelacionesObjeto())
+
+    NFAnuevo = actualizarRelacionConcatenacion(NFAnuevo, idNodo1, idNodo2)
+
+    return NFAnuevo
+
+
+
+
+
 
 
     

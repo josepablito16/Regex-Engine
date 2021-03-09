@@ -5,6 +5,9 @@ def isLiteral(char):
 
 
 def agregarKleenStar(expresion):
+    if(isLiteral(expresion[-1])):
+        return expresion[:-1] + ["("] + expresion[-1 :] + ["*" , "ε" , ")"]
+
     parentesisContador = 0
     parentesisControl = False
     for index in range(len(expresion) - 1, -1, -1):
@@ -40,12 +43,14 @@ def preProcesarExpresion(operacion):
     
 
     for index in range(len(operacion)):
+        print(lista)
         item = operacion[index]
         if (isLiteral(item) and concatControl):
             lista.append('.')
             concatControl = False
         
         if (isLiteral(item) and kleenControl):
+            print(lista)
             lista.append('.')
             kleenControl = False
 
@@ -56,6 +61,8 @@ def preProcesarExpresion(operacion):
         
         
         if (item == '*'):
+            print()
+            print(f"ALERTA EN {lista}")
             lista = agregarKleenStar(lista)
             kleenControl = True
         else:
@@ -73,7 +80,7 @@ def preProcesarExpresion(operacion):
 
 
 if __name__ == '__main__':
-    entradaOriginal = "(a|b)*abb" 
+    entradaOriginal = "(ε|a*b)" 
     entradaFinal = '((((((a|b)*ε).a).b).b))'
 
     entradaPreprocesada = preProcesarExpresion(entradaOriginal)

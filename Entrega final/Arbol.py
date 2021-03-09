@@ -2,13 +2,14 @@ from Nodo import Node
 from itertools import product
 from Preprocesador import preProcesarExpresion
 import numpy as np
+from Thompson import *
 
 
 class Arbol(object):
     """docstring for Arbol"""
 
     def __init__(self):
-        self.ecuacion = []
+        self.pila = []
         self.operadores = ['|', '*','.']
         self.numeros = ['a', 'b','ε']
         self.diccionario = {}
@@ -23,50 +24,61 @@ class Arbol(object):
 
         if(Node.getValue() in self.operadores):
             print(f" Operador {Node.getValue()}")
-            if(Node.getValue() == '+'):
-                num1 = self.ecuacion[len(self.ecuacion)-1]
-                num2 = self.ecuacion[len(self.ecuacion)-2]
 
-                self.ecuacion.pop()
-                self.ecuacion.pop()
+            # Operadores
+            if(Node.getValue() == '|'):
+                NFA1 = self.pila[len(self.pila)-1]
+                NFA2 = self.pila[len(self.pila)-2]
+
+                self.pila.pop()
+                self.pila.pop()
                 #print(f"{num1} + {num2}")
 
-                self.ecuacion.append(self.suma(float(num1), float(num2)))
+                self.pila.append(construirOr(NFA1, NFA2))
 
-            if(Node.getValue() == '-'):
-                num1 = self.ecuacion[len(self.ecuacion)-1]
-                num2 = self.ecuacion[len(self.ecuacion)-2]
+            if(Node.getValue() == '*'):
+                NFA1 = self.pila[len(self.pila)-1]
+                NFA2 = self.pila[len(self.pila)-2]
 
-                self.ecuacion.pop()
-                self.ecuacion.pop()
+                
+
+                self.pila.pop()
+                self.pila.pop()
                 #print(f"{num1} - {num2}")
 
-                self.ecuacion.append(self.resta(float(num1), float(num2)))
+                self.pila.append(construirKleen(NFA2))
 
 
-            if(Node.getValue() == '/'):
-                num1 = self.ecuacion[len(self.ecuacion)-1]
-                num2 = self.ecuacion[len(self.ecuacion)-2]
+            if(Node.getValue() == '.'):
+                NFA1 = self.pila[len(self.pila)-1]
+                NFA2 = self.pila[len(self.pila)-2]
+                
+                print()
+                print("PRESTAR ATENCION")
 
-                self.ecuacion.pop()
-                self.ecuacion.pop()
+                print(NFA1)
+                print(NFA2)
+                print()
+
+                self.pila.pop()
+                self.pila.pop()
                 #print(f"{num1} / {num2}")
 
-                self.ecuacion.append(self.div(float(num1), float(num2)))
+                self.pila.append(construirConcatenacion(NFA2, NFA1))
 
             if(Node.getValue() == '^'):
-                num1 = self.ecuacion[len(self.ecuacion)-1]
-                num2 = self.ecuacion[len(self.ecuacion)-2]
+                num1 = self.pila[len(self.pila)-1]
+                num2 = self.pila[len(self.pila)-2]
 
-                self.ecuacion.pop()
-                self.ecuacion.pop()
+                self.pila.pop()
+                self.pila.pop()
                 #print(f"{num1} / {num2}")
 
-                self.ecuacion.append(self.exp(float(num1), float(num2)))
+                self.pila.append(self.exp(float(num1), float(num2)))
 
         else:
             print(f"No Operador {Node.getValue()}")
-            self.ecuacion.append(Node.getValue())
+            self.pila.append(construirUnSimbolo(Node.getValue()))
         # print("ECUACION")
         # print(self.ecuacion)
 
@@ -100,4 +112,4 @@ class Arbol(object):
 		'''
         # print("postOrder")
         self.postOrder(root)
-        return self.ecuacion[0]
+        return self.pila[0]

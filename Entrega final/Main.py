@@ -1,9 +1,9 @@
 from Arbol import *
-
+from Thompson import *
 
 
 a = Arbol()
 
 #entrada = "(a|b)*abb"
-entrada = "(a|b)"
-a.interpretarEcuacion(entrada)
+entrada = "(ε|a*b)"
+visualizarNFA(a.interpretarEcuacion(entrada))

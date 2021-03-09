@@ -49,8 +49,11 @@ class RelacionThompson(object):
         return [self.idNodo1, self.idNodo2, self.nombreRelacion]
     
     def actualizarRelacion(self,diccionarioId):
-        self.idNodo1 = diccionarioId[self.idNodo1]
-        self.idNodo2 = diccionarioId[self.idNodo2]
+        try:
+            self.idNodo1 = diccionarioId[self.idNodo1]
+            self.idNodo2 = diccionarioId[self.idNodo2]
+        except:
+            pass
 
 
 # METODOS COMPLEMENTARIOS

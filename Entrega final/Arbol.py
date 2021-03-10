@@ -2,7 +2,7 @@ from Nodo import Node
 from itertools import product
 from Preprocesador import preProcesarExpresion
 import numpy as np
-from Thompson import *
+import Thompson as t
 
 
 class Arbol(object):
@@ -34,7 +34,7 @@ class Arbol(object):
                 self.pila.pop()
                 #print(f"{num1} + {num2}")
 
-                self.pila.append(construirOr(NFA1, NFA2))
+                self.pila.append(t.construirOr(NFA1, NFA2))
 
             if(Node.getValue() == '*'):
                 NFA1 = self.pila[len(self.pila)-1]
@@ -46,7 +46,7 @@ class Arbol(object):
                 self.pila.pop()
                 #print(f"{num1} - {num2}")
 
-                self.pila.append(construirKleen(NFA2))
+                self.pila.append(t.construirKleen(NFA2))
 
 
             if(Node.getValue() == '.'):
@@ -64,7 +64,7 @@ class Arbol(object):
                 self.pila.pop()
                 #print(f"{num1} / {num2}")
 
-                self.pila.append(construirConcatenacion(NFA2, NFA1))
+                self.pila.append(t.construirConcatenacion(NFA2, NFA1))
 
             if(Node.getValue() == '^'):
                 num1 = self.pila[len(self.pila)-1]
@@ -78,7 +78,7 @@ class Arbol(object):
 
         else:
             print(f"No Operador {Node.getValue()}")
-            self.pila.append(construirUnSimbolo(Node.getValue()))
+            self.pila.append(t.construirUnSimbolo(Node.getValue()))
         # print("ECUACION")
         # print(self.ecuacion)
 

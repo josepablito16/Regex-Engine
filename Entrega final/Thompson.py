@@ -1,36 +1,36 @@
-from NodoThompson import *
-from Grafo import *
+import NodoThompson as nt
+import Grafo as g
 
 def construirUnSimbolo(simbolo):
     NFA = {}
-    NFA[1] = NodoThompson(True, False)
-    NFA[2] = NodoThompson(False, True)
+    NFA[1] = nt.NodoThompson(True, False)
+    NFA[2] = nt.NodoThompson(False, True)
 
-    NFA[1].agregarRelacion(RelacionThompson(1, simbolo, 2))
+    NFA[1].agregarRelacion(nt.RelacionThompson(1, simbolo, 2))
     return NFA
     
 
 def construirOr(NFA1, NFA2):
     # Se crea el NFA y su estado inicial
     NFA = {}
-    NFA[1] = NodoThompson(True, False)
+    NFA[1] = nt.NodoThompson(True, False)
 
     # Se actualizan los ids de los NFAs
     idContador = 1
-    NFA1, idContador = actualizarIdsNodos(NFA1, idContador)
+    NFA1, idContador = nt.actualizarIdsNodos(NFA1, idContador)
 
-    NFA2, idContador = actualizarIdsNodos(NFA2, idContador)
+    NFA2, idContador = nt.actualizarIdsNodos(NFA2, idContador)
 
 
     # Se obtiene el estado inicial y final de
     # NFA1 y tambien se quitan los estados locales
-    idInicial1, NFA1 = getIdInicial(NFA1)
-    idFinal1, NFA1 = getIdFinal(NFA1)
+    idInicial1, NFA1 = nt.getIdInicial(NFA1)
+    idFinal1, NFA1 = nt.getIdFinal(NFA1)
  
     # Se obtiene el estado inicial y final de
     # NFA2 y tambien se quitan los estados locales
-    idInicial2, NFA2 = getIdInicial(NFA2)
-    idFinal2, NFA2 = getIdFinal(NFA2)
+    idInicial2, NFA2 = nt.getIdInicial(NFA2)
+    idFinal2, NFA2 = nt.getIdFinal(NFA2)
     
     # Join de NFAs
     NFA.update(NFA2)
@@ -39,16 +39,16 @@ def construirOr(NFA1, NFA2):
 
     # Se crean las relaciones del nodo inicial
     print(f"Id Iniciales {[idInicial1, idInicial2]}")
-    NFA[1].agregarRelacion(RelacionThompson(1, "ε", idInicial1))
-    NFA[1].agregarRelacion(RelacionThompson(1, "ε", idInicial2))
+    NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial1))
+    NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial2))
 
     # Se crea el nodo final
     idContador += 1
-    NFA[idContador] = NodoThompson(False, True)
+    NFA[idContador] = nt.NodoThompson(False, True)
 
     # Se crean las relaciones para el nodo final
-    NFA[idFinal1].agregarRelacion(RelacionThompson(idFinal1, "ε", idContador))
-    NFA[idFinal2].agregarRelacion(RelacionThompson(idFinal2, "ε", idContador))
+    NFA[idFinal1].agregarRelacion(nt.RelacionThompson(idFinal1, "ε", idContador))
+    NFA[idFinal2].agregarRelacion(nt.RelacionThompson(idFinal2, "ε", idContador))
 
     return NFA
 
@@ -56,31 +56,31 @@ def construirOr(NFA1, NFA2):
 def construirKleen(NFA1):
     # Se crea el NFA y su estado inicial
     NFA = {}
-    NFA[1] = NodoThompson(True, False)
+    NFA[1] = nt.NodoThompson(True, False)
 
     # Se actualizan los ids de los NFAs
     idContador = 1
-    NFA1, idContador = actualizarIdsNodos(NFA1, idContador)
+    NFA1, idContador = nt.actualizarIdsNodos(NFA1, idContador)
 
     # Se obtiene el estado inicial y final de
     # NFA1 y tambien se quitan los estados locales
-    idInicial1, NFA1 = getIdInicial(NFA1)
-    idFinal1, NFA1 = getIdFinal(NFA1)
+    idInicial1, NFA1 = nt.getIdInicial(NFA1)
+    idFinal1, NFA1 = nt.getIdFinal(NFA1)
 
     # Join de NFAs
     NFA.update(NFA1)
 
     # Se crea el nodo final
     idContador += 1
-    NFA[idContador] = NodoThompson(False, True)
+    NFA[idContador] = nt.NodoThompson(False, True)
 
     # Se crean las relaciones del nodo inicial
-    NFA[1].agregarRelacion(RelacionThompson(1, "ε", idInicial1))
-    NFA[1].agregarRelacion(RelacionThompson(1, "ε", idContador))
+    NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial1))
+    NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idContador))
 
     # Se agregan relaciones del NFA1
-    NFA[idFinal1].agregarRelacion(RelacionThompson(idFinal1, "ε", idInicial1))
-    NFA[idFinal1].agregarRelacion(RelacionThompson(idFinal1, "ε", idContador))
+    NFA[idFinal1].agregarRelacion(nt.RelacionThompson(idFinal1, "ε", idInicial1))
+    NFA[idFinal1].agregarRelacion(nt.RelacionThompson(idFinal1, "ε", idContador))
 
     return NFA
 
@@ -91,20 +91,20 @@ def construirConcatenacion(NFA1, NFA2):
 
     # Se actualizan los ids del NFA2
     idContador = max(NFA1.keys())
-    NFA2, idContador = actualizarIdsNodos(NFA2, idContador)
+    NFA2, idContador = nt.actualizarIdsNodos(NFA2, idContador)
 
     # Se obtiene el estado final de NFA1
-    idFinal1, NFA1 = getIdFinal(NFA1)
+    idFinal1, NFA1 = nt.getIdFinal(NFA1)
 
     # Se obtiene el estado inicial de NFA2
-    idInicial2, NFA2 = getIdInicial(NFA2)
+    idInicial2, NFA2 = nt.getIdInicial(NFA2)
 
     # Join de NFAs
     NFA.update(NFA1)
     NFA.update(NFA2)
 
     print(NFA)
-    NFA = mergeEstados(NFA, idFinal1, idInicial2)
+    NFA = nt.mergeEstados(NFA, idFinal1, idInicial2)
     print(NFA)
 
     # Merge estados
@@ -129,4 +129,4 @@ if __name__ == '__main__':
 
     NFA4 = construirUnSimbolo("b")
 
-    visualizarNFA(construirConcatenacion(concatenacion1, NFA4))
+    g.visualizarNFA(construirConcatenacion(concatenacion1, NFA4))

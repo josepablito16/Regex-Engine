@@ -110,6 +110,24 @@ def construirConcatenacion(NFA1, NFA2):
     # Merge estados
     return NFA
 
+def getLenguaje(NFA):
+    print("getLenguaje")
+    lenguaje = []
+    for nodo in NFA.values():
+        relaciones = nodo.getRelaciones()
+        if (len(relaciones) > 1):
+            for relacion in relaciones:
+                lenguaje.append(relacion[2])
+        elif(len(relaciones) != 0):
+            lenguaje.append(relaciones[0][2])
+    
+    lenguajeFinal = []
+    for i in set(lenguaje):
+        if (i != 'ε'):
+            lenguajeFinal.append(i)
+    
+    return lenguajeFinal
+
 
     
 

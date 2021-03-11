@@ -1,28 +1,15 @@
-class NodoThompson(object):
-    def __init__(self, estadoInicial, estadoFinal):
+class NodoSubconjuntos(object):
+    def __init__(self, estadoInicial, estados):
         self.relaciones = []
-        self.estadoFinal = estadoFinal
+        self.estadoFinal = False
         self.estadoInicial = estadoInicial
+        self.estados = estados # es lista
 
     def agregarRelacion(self,nuevaRelacion):
         self.relaciones.append(nuevaRelacion)
     
-    def setRelaciones(self, relacionesObjeto):
-        self.relaciones = relacionesObjeto
-    
     def isEstadoFinal(self):
         return self.estadoFinal
-    
-    def isEstadoInicial(self):
-        return self.estadoInicial
-    
-    def clearEstado(self):
-        self.estadoFinal = False
-        self.estadoInicial = False
-    
-    def setEstados(estadoInicial, estadoFinal):
-        self.estadoFinal = estadoFinal
-        self.estadoInicial = estadoInicial
     
     def getRelacionesObjeto(self):
         return self.relaciones
@@ -33,13 +20,13 @@ class NodoThompson(object):
             relacionesList.append(relacion.getRelacion())
         return relacionesList
     
-    def actualizarRelaciones(self, diccionarioId):
-        for relacion in self.relaciones:
-            relacion.actualizarRelacion(diccionarioId)
+    def getEstados(self):
+        return self.estados
+    
             
 
 
-class RelacionThompson(object):
+class RelacionSubconjuntos(object):
     def __init__(self, idNodo1, nombreRelacion, idNodo2):
         self.idNodo1 = idNodo1
         self.nombreRelacion = nombreRelacion

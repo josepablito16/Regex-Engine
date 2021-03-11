@@ -1,10 +1,60 @@
 import Thompson as t
 import Grafo as g
+import NodoSubconjuntos as ns
 
 letrasId = list(map(chr, range(ord('A'), ord('Z')+1)))
+colaLetrasId =[]
 
+def nextLetraId():
+    nextLetra = letrasId.pop(0)
+    colaLetrasId.append(nextLetra)
+    return nextLetra
+
+def getLetraIdActual():
+    return colaLetrasId.pop(0)
+
+# Compara si dos listas son equivalentes
 def compararConjuntos(conjunto1, conjunto2):
     return set(conjunto1).issubset(set(conjunto2)) and len(conjunto1) == len(conjunto2)
+
+# Revisa si el nuevo estado es 
+# equivalente a uno existente
+def isNuevoEstado(estados, posibleNuevoEstado):
+    for id, nodo in estados.items():
+        if (compararConjuntos(nodo.getEstados(), posibleNuevoEstado)):
+            return True, id
+    return False, None
+
+def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
+
+    for letra in lenguaje:
+        mover = t.mover(NFA, estados[estadoPivote].getEstados(), letra)
+
+        if (len(mover) > 0):
+            e_cerraduraTemp = t.e_cerradura(NFA, mover)
+            print(e_cerraduraTemp)
+            estadoControl, idEstado = isNuevoEstado(estados, e_cerraduraTemp)
+
+            if (estadoControl):
+                # Ya existe un estado igual, 
+                # se crea relacion
+                print("Crear relacion estado existente")
+            else:
+                estados[nextLetraId()] = ns.NodoSubconjuntos(False, e_cerraduraTemp)
+                print("Crear relacion nuevo estado")
+        
+        '''
+        print(f"""
+
+        lenguaje = {lenguaje}
+        estados = {estados}
+        *mover = {mover}
+        colaLetrasId = {colaLetrasId}
+
+        """)
+        '''
+    return estados
+
 
 def generarSubConjuntos(NFA):
     lenguaje = t.getLenguaje(NFA)
@@ -13,16 +63,14 @@ def generarSubConjuntos(NFA):
     
     idNodoInicial, _ = t.getIdNodoInicio(NFA)
 
+    # e-cerradura del estado inicial
+    estados[nextLetraId()] = ns.NodoSubconjuntos(True, t.e_cerradura(NFAOR, [idNodoInicial]))
 
-    estados[letrasId.pop(0)] = t.e_cerradura(NFAOR, [idNodoInicial])
+    while (len(colaLetrasId) > 0):
+        print(colaLetrasId)
+        estados = generarSubConjuntosIteracion(getLetraIdActual(), NFA, estados, lenguaje)
     
-    mover = list(set(t.mover(NFA, estados['A'], 'a')) - set(estados['A']))
-    print(f"""
-    lenguaje = {lenguaje}
-    idNodoInicial = {idNodoInicial}
-    estados = {estados}
-    *mover = {mover}
-    """)
+    print(estados)
 
 
 

@@ -35,10 +35,10 @@ def construirOr(NFA1, NFA2):
     # Join de NFAs
     NFA.update(NFA2)
     NFA.update(NFA1)
-    print(f"NFA = {NFA}")
+    #print(f"NFA = {NFA}")
 
     # Se crean las relaciones del nodo inicial
-    print(f"Id Iniciales {[idInicial1, idInicial2]}")
+    #print(f"Id Iniciales {[idInicial1, idInicial2]}")
     NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial1))
     NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial2))
 
@@ -103,9 +103,9 @@ def construirConcatenacion(NFA1, NFA2):
     NFA.update(NFA1)
     NFA.update(NFA2)
 
-    print(NFA)
+    #print(NFA)
     NFA = nt.mergeEstados(NFA, idFinal1, idInicial2)
-    print(NFA)
+    #print(NFA)
 
     # Merge estados
     return NFA
@@ -150,9 +150,12 @@ def e_cerradura(NFA, estado):
 def getIdNodoInicio(NFA):
     return nt.getIdInicial(NFA)
 
-def moverRecursivo(NFA, estado, simbolo):
+def getIdNodoFin(NFA):
+    return nt.getIdFinal(NFA)
+
+def mover(NFA, estado, simbolo):
     elementos = []
-    elementos += estado 
+    
     for elemento in estado:
         for nodo in NFA.values():
             relaciones = nodo.getRelaciones()
@@ -160,15 +163,14 @@ def moverRecursivo(NFA, estado, simbolo):
                 for relacion in relaciones:
                     if (elemento == relacion[0] and relacion[2] == simbolo):
                         #print(relacion[1])
-                        elementos += moverRecursivo(NFA, [relacion[1]],simbolo)
+                        elementos.append(relacion[1])
             elif(len(relaciones) != 0):
                 if (elemento == relaciones[0][0] and relaciones[0][2] == simbolo):
                     #print(relaciones[0][1])
-                    elementos += moverRecursivo(NFA, [relaciones[0][1]],simbolo)
+                    elementos.append(relaciones[0][1])
     return elementos
 
-def mover(NFA, estado, simbolo):
-    return list(set(moverRecursivo(NFA, estado, simbolo)) - set(estado))
+
 
 
 

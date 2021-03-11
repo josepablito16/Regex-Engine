@@ -11,6 +11,9 @@ class NodoSubconjuntos(object):
     def isEstadoFinal(self):
         return self.estadoFinal
     
+    def setEstadoFinal(self):
+        self.estadoFinal = True
+    
     def getRelacionesObjeto(self):
         return self.relaciones
     
@@ -44,3 +47,28 @@ class RelacionSubconjuntos(object):
 
 
 # METODOS COMPLEMENTARIOS
+def getEstadosFinales(NFD):
+    estadosFinales = []
+    for id, nodo in NFD.items():
+        if (nodo.isEstadoFinal()):
+            estadosFinales.append(id)
+    
+    return estadosFinales
+
+def setEstadosFinales(NFD, idEstadoFinal):
+    for id, nodo in NFD.items():
+        if (idEstadoFinal in nodo.getEstados()):
+            nodo.setEstadoFinal()
+    
+    return NFD
+
+def getRelacionesNFD(NFD):
+    relaciones = []
+    for id, nodo in NFD.items():
+        relaciones.append(nodo.getRelaciones())
+    return relaciones
+
+
+def printNFDdebug(NFD):
+    for id, nodo in NFD.items():
+        print(f"{id} : {nodo.getEstados()}")

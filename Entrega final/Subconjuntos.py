@@ -6,6 +6,26 @@ letrasId = list(map(chr, range(ord('A'), ord('Z')+1)))
 def compararConjuntos(conjunto1, conjunto2):
     return set(conjunto1).issubset(set(conjunto2)) and len(conjunto1) == len(conjunto2)
 
+def generarSubConjuntos(NFA):
+    lenguaje = t.getLenguaje(NFA)
+    estados = {}
+    estadosRevisados = [] # los estados que ya se revisaron
+    
+    idNodoInicial, _ = t.getIdNodoInicio(NFA)
+
+
+    estados[letrasId.pop(0)] = t.e_cerradura(NFAOR, [idNodoInicial])
+    
+    mover = list(set(t.mover(NFA, estados['A'], 'a')) - set(estados['A']))
+    print(f"""
+    lenguaje = {lenguaje}
+    idNodoInicial = {idNodoInicial}
+    estados = {estados}
+    *mover = {mover}
+    """)
+
+
+
 
 
 
@@ -30,5 +50,6 @@ if __name__ == '__main__':
     print()
     print(NFAOR)
     print()
-    print(t.getLenguaje(NFAOR))
+    generarSubConjuntos(NFAOR)
+
     #g.visualizarNFA(NFAOR)

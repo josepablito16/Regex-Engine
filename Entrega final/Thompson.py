@@ -111,7 +111,6 @@ def construirConcatenacion(NFA1, NFA2):
     return NFA
 
 def getLenguaje(NFA):
-    print("getLenguaje")
     lenguaje = []
     for nodo in NFA.values():
         relaciones = nodo.getRelaciones()
@@ -129,7 +128,47 @@ def getLenguaje(NFA):
     return lenguajeFinal
 
 
+def e_cerradura(NFA, estado):
+    elementos = []
+    elementos += estado
     
+    for elemento in estado:
+        for nodo in NFA.values():
+            relaciones = nodo.getRelaciones()
+            if (len(relaciones) > 1):
+                for relacion in relaciones:
+                    if (elemento == relacion[0] and relacion[2] =='ε'):
+                        #print(relacion[1])
+                        elementos += e_cerradura(NFA, [relacion[1]])
+            elif(len(relaciones) != 0):
+                if (elemento == relaciones[0][0] and relaciones[0][2] =='ε'):
+                    #print(relaciones[0][1])
+                    elementos += e_cerradura(NFA, [relaciones[0][1]])
+
+    return elementos
+
+def getIdNodoInicio(NFA):
+    return nt.getIdInicial(NFA)
+
+def moverRecursivo(NFA, estado, simbolo):
+    elementos = []
+    elementos += estado 
+    for elemento in estado:
+        for nodo in NFA.values():
+            relaciones = nodo.getRelaciones()
+            if (len(relaciones) > 1):
+                for relacion in relaciones:
+                    if (elemento == relacion[0] and relacion[2] == simbolo):
+                        #print(relacion[1])
+                        elementos += moverRecursivo(NFA, [relacion[1]],simbolo)
+            elif(len(relaciones) != 0):
+                if (elemento == relaciones[0][0] and relaciones[0][2] == simbolo):
+                    #print(relaciones[0][1])
+                    elementos += moverRecursivo(NFA, [relaciones[0][1]],simbolo)
+    return elementos
+
+def mover(NFA, estado, simbolo):
+    return list(set(moverRecursivo(NFA, estado, simbolo)) - set(estado))
 
 
 

@@ -24,7 +24,7 @@ def compararConjuntos(conjunto1, conjunto2):
 # equivalente a uno existente
 def isNuevoEstado(estados, posibleNuevoEstado):
     for id, nodo in estados.items():
-        print(f"Compara estados {nodo.getEstados()} = {posibleNuevoEstado}")
+        #print(f"Compara estados {nodo.getEstados()} = {posibleNuevoEstado}")
         if (compararConjuntos(nodo.getEstados(), posibleNuevoEstado)):
             return True, id
     return False, None
@@ -32,26 +32,26 @@ def isNuevoEstado(estados, posibleNuevoEstado):
 def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
 
     for letra in lenguaje:
-        print(f"{estadoPivote}, {letra}")
+        #print(f"{estadoPivote}, {letra}")
         mover = t.mover(NFA, estados[estadoPivote].getEstados(), letra)
-        print(f"mover = {mover}")
+        #print(f"mover = {mover}")
 
         if (len(mover) > 0):
             e_cerraduraTemp = t.e_cerradura(NFA, mover)
-            print(f"e_cerraduraTemp = {e_cerraduraTemp}")
+            #print(f"e_cerraduraTemp = {e_cerraduraTemp}")
             estadoControl, idEstado = isNuevoEstado(estados, e_cerraduraTemp)
-            print(f"EstadoControl = {estadoControl}, idEstado = {idEstado}")
+            #print(f"EstadoControl = {estadoControl}, idEstado = {idEstado}")
 
             if (estadoControl):
                 # Ya existe un estado igual, 
                 # se crea relacion
-                print("Crear relacion estado existente")
-                print(f'{estadoPivote} -> {letra} ->{estadoPivote}')
+                #print("Crear relacion estado existente")
+                #print(f'{estadoPivote} -> {letra} ->{estadoPivote}')
                 estados[estadoPivote].agregarRelacion(ns.RelacionSubconjuntos(estadoPivote, letra, estadoPivote))
             else:
-                print("Crear relacion nuevo estado")
+                #print("Crear relacion nuevo estado")
                 nuevoEstadoLetraId = nextLetraId()
-                print(f'{estadoPivote} -> {letra} ->{nuevoEstadoLetraId}')
+                #print(f'{estadoPivote} -> {letra} ->{nuevoEstadoLetraId}')
                 estados[nuevoEstadoLetraId] = ns.NodoSubconjuntos(False, e_cerraduraTemp)
                 estados[estadoPivote].agregarRelacion(ns.RelacionSubconjuntos(estadoPivote, letra, nuevoEstadoLetraId))
         
@@ -77,11 +77,11 @@ def generarSubConjuntos(NFA):
     idNodoInicial, _ = t.getIdNodoInicio(NFA)
 
     # e-cerradura del estado inicial
-    estados[nextLetraId()] = ns.NodoSubconjuntos(True, t.e_cerradura(NFAOR, [idNodoInicial]))
+    estados[nextLetraId()] = ns.NodoSubconjuntos(True, t.e_cerradura(NFA, [idNodoInicial]))
 
 
     while (len(colaLetrasId) > 0):
-        ns.printNFDdebug(estados)
+        #ns.printNFDdebug(estados)
         estados = generarSubConjuntosIteracion(getLetraIdActual(), NFA, estados, lenguaje)
 
     
@@ -89,8 +89,8 @@ def generarSubConjuntos(NFA):
     idNodoFinal, _ = t.getIdNodoFin(NFA)
     estados = ns.setEstadosFinales(estados, idNodoFinal)
     
-
-    g.visualizarNFD(estados)
+    return estados
+    #g.visualizarNFD(estados)
 
 
 

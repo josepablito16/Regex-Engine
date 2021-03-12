@@ -1,10 +1,15 @@
 from Arbol import *
 from Thompson import *
 import Grafo as g
+import Subconjuntos as s
 
 
 a = Arbol()
 
 #entrada = "(a|b)*abb"
 entrada = "(ε|a*b)"
-g.visualizarNFA(a.interpretarEcuacion(entrada))
+NFA = a.interpretarEcuacion(entrada)
+
+g.visualizarNFA(NFA)
+
+g.visualizarNFD(s.generarSubConjuntos(NFA))

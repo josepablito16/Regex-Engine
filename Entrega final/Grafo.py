@@ -30,8 +30,8 @@ f.edge('LR_8', 'LR_5', label='S(a)')
 f.view()
 '''
 
-def visualizarNFA(NFA):
-    f = Digraph('finite_state_machine', filename='fsm.gv')
+def visualizarNFA(NFA, nombre="NFA_Actual"):
+    f = Digraph('finite_state_machine', filename=f'{nombre}.gv')
     f.attr(rankdir='LR', size='8,5')
 
     # Estados finales
@@ -60,12 +60,16 @@ def visualizarNFA(NFA):
     f.view()
 
 
-def visualizarNFD(NFD):
-    f = Digraph('finite_state_machine', filename='fsm.gv')
+def visualizarNFD(NFD, nombre="NFD_Actual"):
+    f = Digraph('finite_state_machine', filename=f'{nombre}.gv')
     f.attr(rankdir='LR', size='8,5')
 
     # Estados finales
     f.attr('node', shape='doublecircle')
+
+    print("Grafo NFD")
+    print(NFD)
+    print()
     
     print("ESTADOS FINALES")
     for idNodo in ns.getEstadosFinales(NFD):

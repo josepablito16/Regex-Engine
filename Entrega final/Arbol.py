@@ -84,25 +84,36 @@ class Arbol(object):
 
     def interpretarEcuacion(self, entrada):
         entrada = preProcesarExpresion(entrada)
+        #entrada = "((a*ε)|b)"
         print(entrada)
         root = Node(None)
         actual = root
 
+        print("Se arma el arbol")
         for i in entrada:
+            print(f"\nElemento : {i}")
             if(i == '('):
+                print("Se crea nodo izquiedo")
+                print("Se mueve al nodo izquierdo")
                 actual.setLeft(None, actual)
                 actual = actual.getLeft()
 
             if(i in self.operadores):
+                print(f"Se pone el valor al nodo: {i}")
+                print("Se crea nodo derecho")
+                print("Se mueve al nodo derecho")
                 actual.setValue(i)
                 actual.setRight(None, actual)
                 actual = actual.getRight()
 
             if(i in self.numeros):
+                print(f"Se pone el valor al nodo: {i}")
+                print("Se mueve a la raiz del nodo")
                 actual.setValue(i)
                 actual = actual.getRoot()
 
             if(i == ')'):
+                print("Se mueve a la raiz del nodo")
                 actual = actual.getRoot()
         '''
 		print("Esta es")

@@ -1,10 +1,20 @@
 from Nodo import Node
+import NodoDirecto as nd
+import Grafo as g
 
 numeros = ['a', 'b','ε','#']
 operadores = ['|', '*','.']
 contador = 1
 nodosHoja ={}
 followPos = {}
+
+letrasId = list(map(chr, range(ord('A'), ord('Z')+1)))
+colaLetrasId =[]
+
+def nextLetraId():
+    nextLetra = letrasId.pop(0)
+    colaLetrasId.append(nextLetra)
+    return nextLetra
 
 def union(lista):
     return list(set(lista))
@@ -134,8 +144,49 @@ def calcularFirstLastPosHoja(nodo):
             nodo.addLastPos([contador])
         contador += 1
  
+
+def construirDFA(estadoInicial):
+    pilaDeEstados=[estadoInicial]
+    estadosCreados = [estadoInicial]
+    DFA = {}
+    DFA[nextLetraId()] = nd.NodoDirecto(estadoInicial, True)
+
+
+    while len(pilaDeEstados) > 0:
+        estadoActual = pilaDeEstados.pop()
+        letraActual = colaLetrasId.pop(0)
+        for letra, ids in nodosHoja.items():
+            if (letra =="#"):
+                continue
+            
+            idsValidos = []
+            
+            for id in ids:
+                if (id in estadoActual):
+                    idsValidos += followPos[id]
+
+            if not (idsValidos in estadosCreados):
+                pilaDeEstados.append(idsValidos)
+                estadosCreados.append(idsValidos)
+
+                # agregar relacion a DFA
+                letraTemp = nextLetraId()
+                DFA[letraTemp] = nd.NodoDirecto(idsValidos)
+
+                # crear relacion con nuevo estado
+                DFA[letraActual].agregarRelacion(nd.RelacionDirecto(letraActual, letra, letraTemp))
+                print(f"{letraActual} -> {letra} -> {letraTemp}")
+            else:
+                # crear relacion con un estado existente
+                print(f"{letraActual} -> {letra} -> {nd.getLetraDeEstados(DFA, idsValidos)}")
+                DFA[letraActual].agregarRelacion(nd.RelacionDirecto(letraActual, letra, nd.getLetraDeEstados(DFA, idsValidos)))
+
     
-    
+    # Revisar estados finales
+    DFA = nd.setEstadosFinales(DFA, contador - 1)
+    return DFA
+
+
 
 def construirFuncionesBasicas(nodo):
     postOrder(nodo)
@@ -144,4 +195,9 @@ def construirFuncionesBasicas(nodo):
     nodosHoja = {nodosHoja}
     followPos = {followPos}
     """)
+
+    DFA = construirDFA(nodo.getFirstPos())
+    g.visualizarDirecto(DFA)
+
+    
     

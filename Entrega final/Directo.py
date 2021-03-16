@@ -3,6 +3,8 @@ from Nodo import Node
 numeros = ['a', 'b','ε','#']
 operadores = ['|', '*','.']
 contador = 1
+nodosHoja ={}
+followPos = {}
 
 def union(lista):
     return list(set(lista))
@@ -23,10 +25,12 @@ def postOrder(Node):
         if(Node.getValue() == '*'):
             calcularNullableStar(Node)
             calcularFirstLastPosStar(Node)
+            calcularFollowPosStar(Node)
         
         if(Node.getValue() == '.'):
             calcularNullableConcat(Node)
             calcularFirstLastPosConcat(Node)
+            calcularFollowPosConcat(Node)
         
         
         Node.info()
@@ -66,8 +70,15 @@ def calcularFirstLastPosConcat(nodo):
     else:
         nodo.addLastPos(nodo.getRight().getLastPos())
 
+def calcularFollowPosConcat(nodo):
+    for i in nodo.getLeft().getLastPos():
+        followPos[i] += nodo.getRight().getFirstPos()
 
 # Calculo de funciones *
+def calcularFollowPosStar(nodo):
+    for i in nodo.getLastPos():
+        followPos[i] += nodo.getFirstPos()
+
 def calcularNullableStar(nodo):
     nodo.setNullable(True)
 
@@ -110,6 +121,12 @@ def calcularNullableHoja(nodo):
 def calcularFirstLastPosHoja(nodo):
     global contador
     if (nodo.getValue() in numeros):
+        try:
+            nodosHoja[nodo.getValue()].append(contador)
+            
+        except:
+            nodosHoja[nodo.getValue()] = [contador]
+        followPos[contador] = []
         if (nodo.getValue() == 'ε'):
             pass
         else:
@@ -122,4 +139,9 @@ def calcularFirstLastPosHoja(nodo):
 
 def construirFuncionesBasicas(nodo):
     postOrder(nodo)
+
+    print(f"""
+    nodosHoja = {nodosHoja}
+    followPos = {followPos}
+    """)
     

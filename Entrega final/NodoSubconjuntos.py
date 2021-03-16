@@ -11,6 +11,9 @@ class NodoSubconjuntos(object):
     def isEstadoFinal(self):
         return self.estadoFinal
     
+    def isEstadoInicial(self):
+        return self.estadoInicial
+    
     def setEstadoFinal(self):
         self.estadoFinal = True
     
@@ -54,6 +57,14 @@ def getEstadosFinales(NFD):
             estadosFinales.append(id)
     
     return estadosFinales
+
+def getEstadosIniciales(NFD):
+    estadosIniciales = []
+    for id, nodo in NFD.items():
+        if (nodo.isEstadoInicial()):
+            estadosIniciales.append(id)
+    
+    return estadosIniciales
 
 def setEstadosFinales(NFD, idEstadoFinal):
     for id, nodo in NFD.items():

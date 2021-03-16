@@ -3,6 +3,7 @@ digraph finite_state_machine {
 	node [shape=doublecircle]
 	9
 	node [shape=circle]
+	1 [color="#3F888F"]
 	1 -> 2 [label="ε"]
 	1 -> 7 [label="ε"]
 	7 -> 8 [label="ε"]

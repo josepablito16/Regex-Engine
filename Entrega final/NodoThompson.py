@@ -64,6 +64,13 @@ def getEstadosFinales(NFA):
             estadosFinales.append(id)
     return estadosFinales
 
+def getEstadosIniciales(NFA):
+    estadosIniciales = []
+    for id, nodo in NFA.items():
+        if (nodo.isEstadoInicial()):
+            estadosIniciales.append(id)
+    return estadosIniciales
+
 def getRelacionesNFA(NFA):
     relaciones = []
     for id, nodo in NFA.items():

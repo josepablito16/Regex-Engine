@@ -7,6 +7,8 @@ def visualizarNFA(NFA, nombre="NFA_Actual"):
     f = Digraph('finite_state_machine', filename=f'{nombre}.gv')
     f.attr(rankdir='LR', size='8,5')
 
+    estadosIniciales = nt.getEstadosIniciales(NFA)
+
     # Estados finales
     f.attr('node', shape='doublecircle')
     
@@ -17,6 +19,11 @@ def visualizarNFA(NFA, nombre="NFA_Actual"):
     
     print("RELACIONES")
     f.attr('node', shape='circle')
+    
+    # Estados iniciales
+    for i in estadosIniciales:
+        f.node(str(i), color="#3F888F")
+
     for relacion in nt.getRelacionesNFA(NFA):
         try:
             
@@ -43,6 +50,8 @@ def visualizarNFD(NFD, nombre="NFD_Actual"):
     print("Grafo NFD")
     print(NFD)
     print()
+
+    estadosIniciales = ns.getEstadosIniciales(NFD)
     
     print("ESTADOS FINALES")
     for idNodo in ns.getEstadosFinales(NFD):
@@ -51,6 +60,11 @@ def visualizarNFD(NFD, nombre="NFD_Actual"):
     
     print("RELACIONES")
     f.attr('node', shape='circle')
+
+    # Estados iniciales
+    for i in estadosIniciales:
+        f.node(str(i), color="#3F888F")
+
     for relacion in ns.getRelacionesNFD(NFD):
         try:
             
@@ -91,7 +105,7 @@ def visualizarDirecto(DFA, nombre="DFA_Directo_Actual"):
     
     # Estados iniciales
     for i in estadosIniciales:
-        f.node("A", color="#3F888F")
+        f.node(str(i), color="#3F888F")
 
     for relacion in nd.getRelacionesDFA(DFA):
         try:

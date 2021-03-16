@@ -8,6 +8,28 @@ class Node(object):
         self.left = None
         self.right = None
 
+        self.nullable = None
+        self.firstPos = []
+        self.lastPos = []
+    
+    def isNullable(self):
+        return self.nullable
+    
+    def getFirstPos(self):
+        return self.firstPos
+    
+    def getLastPos(self):
+        return self.lastPos
+    
+    def setNullable(self, nullable):
+        self.nullable = nullable
+    
+    def addFirstPos(self, pos):
+        self.firstPos.append(pos)
+    
+    def addLastPos(self, pos):
+        self.lastPos.append(pos)
+
     def getValue(self):
         return self.value
 
@@ -28,6 +50,14 @@ class Node(object):
 
     def setValue(self, value):
         self.value = value
+    
+    def info(self):
+        print(f"""
+        Value = {self.value}
+        Nullable = {self.nullable}
+        FirstPos = {self.firstPos}
+        LastPos = {self.lastPos}
+        """)
 
 
 # MAAAIN

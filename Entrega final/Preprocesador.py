@@ -1,12 +1,12 @@
 
 # retorna si es numero o digito True
 def isLiteral(char):
-    return char.isalpha() or char.isdigit() or char in ['ε']
+    return char.isalpha() or char.isdigit() or char in ['ε','α']
 
 
 def agregarKleenStar(expresion):
     if(isLiteral(expresion[-1])):
-        return expresion[:-1] + ["("] + expresion[-1 :] + ["*" , "ε" , ")"]
+        return expresion[:-1] + ["("] + expresion[-1 :] + ["*" , "α" , ")"]
 
     parentesisContador = 0
     parentesisControl = False
@@ -19,7 +19,7 @@ def agregarKleenStar(expresion):
             parentesisContador -= 1
         
         if (parentesisContador == 0 and parentesisControl):
-            return expresion[:index] + ["("] + expresion[index :] + ["*" , "ε" , ")"]
+            return expresion[:index] + ["("] + expresion[index :] + ["*" , "α" , ")"]
 
 def agregarAgrupacionConcat(expresion):
     parentesisContador = 0
@@ -81,7 +81,7 @@ def preProcesarExpresion(operacion):
 
 if __name__ == '__main__':
     entradaOriginal = "(ε|a*b)" 
-    entradaFinal = '((((((a|b)*ε).a).b).b))'
+    entradaFinal = '((((((a|b)*α).a).b).b))'
 
     entradaPreprocesada = preProcesarExpresion(entradaOriginal)
 

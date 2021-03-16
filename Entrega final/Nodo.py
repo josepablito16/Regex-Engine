@@ -25,10 +25,10 @@ class Node(object):
         self.nullable = nullable
     
     def addFirstPos(self, pos):
-        self.firstPos.append(pos)
+        self.firstPos += pos
     
     def addLastPos(self, pos):
-        self.lastPos.append(pos)
+        self.lastPos += pos
 
     def getValue(self):
         return self.value

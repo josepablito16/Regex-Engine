@@ -53,7 +53,13 @@ class RelacionDirecto(object):
 
 def getLetraDeEstados(DFA, estados):
     for letra, nodo in DFA.items():
-        if (nodo.getEstados() == estados):
+        if(
+            list(set(nodo.getEstados()) - set(estados))
+            ==
+            list(set(estados) - set(nodo.getEstados()))
+            ==
+            []
+        ):
             return letra
 
 

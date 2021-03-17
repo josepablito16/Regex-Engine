@@ -132,7 +132,7 @@ class Arbol(object):
 
     def interpretarEcuacion(self, entrada):
         entrada = preProcesarExpresion(entrada)
-        entrada = "(ε|((a*α).b))"
+        entrada = "(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))"
         print(entrada)
         root = Node(None)
         actual = root
@@ -174,9 +174,9 @@ class Arbol(object):
         return self.pila[0]
 
     def armarArbol(self, entrada):
-        entrada = preProcesarExpresion(entrada)
-        entrada = "((ε|((a*α).b)).#)"
-        entrada = "((((((a|b)*α).a).b).b).#)"
+        #entrada = preProcesarExpresion(entrada)
+        #entrada = "((ε|((a*α).b)).#)"
+        #entrada = "((((((a|b)*α).a).b).b).#)"
         print(entrada)
         root = Node(None)
         actual = root

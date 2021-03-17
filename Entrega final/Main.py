@@ -15,4 +15,11 @@ g.visualizarNFD(s.generarSubConjuntos(NFA))
 
 
 # DFA directo
+entrada = "((((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b)).#)"
 a.armarArbol(entrada)
+
+
+#(ba)+ = ((b.a).((b.a)*α))
+#((a.(b*α)).a)
+#(a|b)
+

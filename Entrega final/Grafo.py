@@ -87,10 +87,6 @@ def visualizarDirecto(DFA, nombre="DFA_Directo_Actual"):
     # Estados finales
     f.attr('node', shape='doublecircle')
 
-    print("Grafo DFA")
-    print(DFA)
-    print()
-
     estadosIniciales = nd.getEstadosIniciales(DFA)
     
     print("ESTADOS FINALES")

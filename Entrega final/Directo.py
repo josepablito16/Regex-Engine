@@ -11,6 +11,19 @@ followPos = {}
 letrasId = list(map(chr, range(ord('A'), ord('Z')+1)))
 colaLetrasId =[]
 
+
+def compararEstados(idsValidos, estadosCreados):
+    for estado in estadosCreados:
+        if(
+            list(set(idsValidos) - set(estado))
+            ==
+            list(set(estado) - set(idsValidos))
+            ==
+            []
+        ):
+            return True
+    return False
+
 def nextLetraId():
     nextLetra = letrasId.pop(0)
     colaLetrasId.append(nextLetra)
@@ -154,7 +167,9 @@ def construirDFA(estadoInicial):
 
     while len(pilaDeEstados) > 0:
         estadoActual = pilaDeEstados.pop()
-        letraActual = colaLetrasId.pop(0)
+        letraActual = colaLetrasId.pop()
+        print()
+        print(f"EN EL ESTADO : {estadoActual}")
         for letra, ids in nodosHoja.items():
             if (letra =="#"):
                 continue
@@ -165,22 +180,32 @@ def construirDFA(estadoInicial):
                 if (id in estadoActual):
                     idsValidos += followPos[id]
 
-            if not (idsValidos in estadosCreados):
-                pilaDeEstados.append(idsValidos)
-                estadosCreados.append(idsValidos)
+            if not (compararEstados(idsValidos, estadosCreados)):
+                if (idsValidos == []):
+                    continue
+                
+                pilaDeEstados.append(list(set(idsValidos)))
+                estadosCreados.append(list(set(idsValidos)))
 
                 # agregar relacion a DFA
                 letraTemp = nextLetraId()
-                DFA[letraTemp] = nd.NodoDirecto(idsValidos)
+                colaLetrasId.append(letraTemp)
+                DFA[letraTemp] = nd.NodoDirecto(list(set(idsValidos)))
 
                 # crear relacion con nuevo estado
-                DFA[letraActual].agregarRelacion(nd.RelacionDirecto(letraActual, letra, letraTemp))
-                print(f"{letraActual} -> {letra} -> {letraTemp}")
+                DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].agregarRelacion(nd.RelacionDirecto(nd.getLetraDeEstados(DFA, list(set(estadoActual))), letra, letraTemp))
+                print("NUEVO ESTADO")
+                print(f"{DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].getEstados()} -> {letra} -> {DFA[letraTemp].getEstados()}")
             else:
                 # crear relacion con un estado existente
-                print(f"{letraActual} -> {letra} -> {nd.getLetraDeEstados(DFA, idsValidos)}")
-                DFA[letraActual].agregarRelacion(nd.RelacionDirecto(letraActual, letra, nd.getLetraDeEstados(DFA, idsValidos)))
+                print("ESTADO EXISTENTE")
+                print(f"{DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].getEstados()} -> {letra} -> {DFA[nd.getLetraDeEstados(DFA, list(set(idsValidos)))].getEstados()}")
+                DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].agregarRelacion(nd.RelacionDirecto(nd.getLetraDeEstados(DFA, list(set(estadoActual))), letra, nd.getLetraDeEstados(DFA, list(set(idsValidos)))))
 
+
+    print()
+    for id, nodo in DFA.items():
+        print(f" {id} = {nodo.getEstados()}")
     
     # Revisar estados finales
     DFA = nd.setEstadosFinales(DFA, contador - 1)

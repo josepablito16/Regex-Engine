@@ -15,8 +15,8 @@ digraph finite_state_machine {
 	E -> F [label=a]
 	E -> G [label=b]
 	F -> H [label=b]
-	G -> G [label=a]
+	G -> D [label=a]
 	G -> G [label=b]
 	H -> I [label=a]
-	I -> I [label=b]
+	I -> H [label=b]
 }

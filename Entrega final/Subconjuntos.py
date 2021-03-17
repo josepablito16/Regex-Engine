@@ -32,26 +32,26 @@ def isNuevoEstado(estados, posibleNuevoEstado):
 def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
 
     for letra in lenguaje:
-        #print(f"{estadoPivote}, {letra}")
+        print(f"{estadoPivote}, {letra}")
         mover = t.mover(NFA, estados[estadoPivote].getEstados(), letra)
-        #print(f"mover = {mover}")
+        print(f"mover = {mover}")
 
         if (len(mover) > 0):
-            e_cerraduraTemp = t.e_cerradura(NFA, mover)
-            #print(f"e_cerraduraTemp = {e_cerraduraTemp}")
+            e_cerraduraTemp = list(set(t.e_cerradura(NFA, mover)))
+            print(f"e_cerraduraTemp = {e_cerraduraTemp}")
             estadoControl, idEstado = isNuevoEstado(estados, e_cerraduraTemp)
-            #print(f"EstadoControl = {estadoControl}, idEstado = {idEstado}")
+            print(f"EstadoControl = {estadoControl}, idEstado = {idEstado}")
 
             if (estadoControl):
                 # Ya existe un estado igual, 
                 # se crea relacion
-                #print("Crear relacion estado existente")
-                #print(f'{estadoPivote} -> {letra} ->{estadoPivote}')
-                estados[estadoPivote].agregarRelacion(ns.RelacionSubconjuntos(estadoPivote, letra, estadoPivote))
+                print("Crear relacion estado existente")
+                print(f'{estadoPivote} -> {letra} ->{idEstado}')
+                estados[estadoPivote].agregarRelacion(ns.RelacionSubconjuntos(estadoPivote, letra, idEstado))
             else:
-                #print("Crear relacion nuevo estado")
+                print("Crear relacion nuevo estado")
                 nuevoEstadoLetraId = nextLetraId()
-                #print(f'{estadoPivote} -> {letra} ->{nuevoEstadoLetraId}')
+                print(f'{estadoPivote} -> {letra} ->{nuevoEstadoLetraId}')
                 estados[nuevoEstadoLetraId] = ns.NodoSubconjuntos(False, e_cerraduraTemp)
                 estados[estadoPivote].agregarRelacion(ns.RelacionSubconjuntos(estadoPivote, letra, nuevoEstadoLetraId))
         
@@ -69,8 +69,8 @@ def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
 
 
 def generarSubConjuntos(NFA):
-    #lenguaje = t.getLenguaje(NFA)
-    lenguaje = ['a','b']
+    print("\n SUBCONJUNTOS \n")
+    lenguaje = t.getLenguaje(NFA)
     estados = {}
     estadosRevisados = [] # los estados que ya se revisaron
     
@@ -81,7 +81,7 @@ def generarSubConjuntos(NFA):
 
 
     while (len(colaLetrasId) > 0):
-        #ns.printNFDdebug(estados)
+        ns.printNFDdebug(estados)
         estados = generarSubConjuntosIteracion(getLetraIdActual(), NFA, estados, lenguaje)
 
     

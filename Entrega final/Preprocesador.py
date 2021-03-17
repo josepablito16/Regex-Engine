@@ -3,6 +3,8 @@
 def isLiteral(char):
     return char.isalpha() or char.isdigit() or char in ['ε','α']
 
+def isOperador(char):
+    return char in ['|','+','?','*']
 
 def agregarKleenStar(expresion):
     if(isLiteral(expresion[-1])):
@@ -36,52 +38,73 @@ def agregarAgrupacionConcat(expresion):
             return expresion[:index] + ['('] + expresion[index :] + [')']
 
 
-def preProcesarExpresion(operacion):
+def separarExpresiones(operacion):
     lista = []
-    concatControl = False
-    kleenControl = False
+    operacionTemp = ""
+
+    parentesisAbierto = False
+    parentesisContador = 0
+    for i in range(len(operacion)):
+        if (isLiteral(operacion[i]) == True and isLiteral(operacion[i +1]) == False and parentesisAbierto == False):
+            lista.append(operacion[i])
+        
+        if (isLiteral(operacion[i]) and parentesisAbierto):
+            operacionTemp += operacion[i]
+
+        if (isOperador(operacion[i]) and parentesisAbierto):
+            operacionTemp += operacion[i]
+        
+        if (isOperador(operacion[i]) and not parentesisAbierto):
+            if (operacion[i] in ['+','*','?']):
+                lista.append(lista.pop() + operacion[i])
+            else:
+                lista.append(operacion[i])
+
+        if (operacion[i] == '('):
+            operacionTemp += operacion[i]
+            parentesisAbierto = True
+            parentesisContador += 1
+        
+        if (operacion[i] == ')'):
+            operacionTemp += operacion[i]
+            parentesisContador -= 1
+
+            if (parentesisContador == 0):
+                lista.append(operacionTemp)
+                operacionTemp = ""
+                parentesisAbierto = False
+                parentesisContador = 0
+        
+        
+         
+    return lista
+
+def revisarOperadoresLista(operacion):
+    listaNueva = []
+
+    print()
+    #listaNueva += operacion[:operacion.index('+')]
     
+    return listaNueva
 
-    for index in range(len(operacion)):
-        print(lista)
-        item = operacion[index]
-        if (isLiteral(item) and concatControl):
-            lista.append('.')
-            concatControl = False
+
         
-        if (isLiteral(item) and kleenControl):
-            print(lista)
-            lista.append('.')
-            kleenControl = False
 
-        if (isLiteral(item) and not concatControl):
-            concatControl = True
-        else:
-            concatControl = False
-        
-        
-        if (item == '*'):
-            print()
-            print(f"ALERTA EN {lista}")
-            lista = agregarKleenStar(lista)
-            kleenControl = True
-        else:
-            lista.append(item)
 
-        if(isLiteral(item) and lista[-2] == "."):
-            #print()
-            #print(f"ALERTA EN {lista}")
-            lista = agregarAgrupacionConcat(lista)
 
-    
-    return ''.join(lista)
+def preProcesarExpresion(operacion):
+    lista = separarExpresiones(operacion)
+    print(lista)
+    lista = revisarOperadoresLista(lista)
+    print(lista)
+
 
 
 
 
 if __name__ == '__main__':
-    entradaOriginal = "(ε|a*b)" 
-    entradaFinal = '((((((a|b)*α).a).b).b))'
+    entradaOriginal = "a(ba)+|(a(b)*a)|(a|b)" 
+    entradaFinal = '(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))'
 
     entradaPreprocesada = preProcesarExpresion(entradaOriginal)
 

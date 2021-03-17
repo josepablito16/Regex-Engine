@@ -131,7 +131,7 @@ class Arbol(object):
         # print(self.ecuacion)
 
     def interpretarEcuacion(self, entrada):
-        entrada = preProcesarExpresion(entrada)
+        #entrada = preProcesarExpresion(entrada)
         entrada = "(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))"
         print(entrada)
         root = Node(None)

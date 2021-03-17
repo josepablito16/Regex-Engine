@@ -79,25 +79,86 @@ def separarExpresiones(operacion):
          
     return lista
 
-def revisarOperadoresLista(operacion):
-    listaNueva = []
+def concatenar(operacion, inicio, fin):
+    print(f"({operacion[:fin]}.{operacion[fin:]})")
 
-    print()
-    #listaNueva += operacion[:operacion.index('+')]
-    
-    return listaNueva
+def operacionToList(operacion):
+    lista = []
+    temp = ""
+    parentesisAbierto = False
+    contadorParentesis = 0 
 
+    if(operacion[0] == "(" and (operacion[-1] == ")" or operacion[-1] in ['+','*','?'])):
+        lista.append(operacion)
+        return lista
+        return 0
 
+    for i in operacion:
+        if (isLiteral(i) and not parentesisAbierto):
+            lista.append(i)
         
+        if (isLiteral(i) and parentesisAbierto):
+            temp += i
 
+
+        if (isOperador(i) and not parentesisAbierto):
+            lista.append(i)
+        
+        if (isOperador(i) and parentesisAbierto and contadorParentesis == 0):
+            temp += i
+            lista.append(temp)
+            temp = ""
+            parentesisAbierto = False
+        
+        if (i == "(" and not parentesisAbierto):
+            parentesisAbierto = True
+            temp += i
+            contadorParentesis += 1
+        
+        if (i == ")"):
+            temp += i
+            contadorParentesis -= 1
+            
+
+    
+    return lista
+
+
+
+
+def armarSubExpresion(operacion):
+    if (len(operacion) == 1):
+        return operacion
+    
+    if(operacion[0] == "(" and operacion[-1] == ")"):
+        operacion = operacion[1:-1]
+    
+
+    return operacionToList(operacion)
+    
+
+    '''
+    for i in range(len(operacion)):
+        if (isLiteral(operacion[i]) and isLiteral(operacion[i+1])):
+            print(f"CONCATENAR {operacion[i]} . {operacion[i+1]}")
+            concatenar(operacion, i, i+1)
+        
+        if (isLiteral(operacion[i]) and operacion[i+1] == "("):
+            print(f"CONCATENAR {operacion[i]} . {operacion[i+1]}")
+            concatenar(operacion, i, i+1)
+    '''
 
 
 def preProcesarExpresion(operacion):
     lista = separarExpresiones(operacion)
-    print(lista)
-    lista = revisarOperadoresLista(lista)
-    print(lista)
+    
+    for i in lista:
+        print(i)
+        print(f"armarSubExpresion: {armarSubExpresion(i)}")
+        print()
 
+    return lista
+    
 
 
 
@@ -107,8 +168,11 @@ if __name__ == '__main__':
     entradaFinal = '(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))'
 
     entradaPreprocesada = preProcesarExpresion(entradaOriginal)
-
     print(entradaPreprocesada)
+
+
+
+
     #print(list(entradaFinal))
     print(entradaPreprocesada == entradaFinal)
 

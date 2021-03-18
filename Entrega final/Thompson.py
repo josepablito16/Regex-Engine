@@ -128,7 +128,7 @@ def getLenguaje(NFA):
     return lenguajeFinal
 
 
-def e_cerradura(NFA, estado):
+def e_cerradura(NFA, estado, visitados = []):
     elementos = []
     elementos += estado
     
@@ -139,11 +139,17 @@ def e_cerradura(NFA, estado):
                 for relacion in relaciones:
                     if (elemento == relacion[0] and relacion[2] =='ε'):
                         #print(relacion[1])
-                        elementos += e_cerradura(NFA, [relacion[1]])
+                        if (relacion[1] in visitados):
+                            continue
+                        visitados.append(relacion[1])
+                        elementos += e_cerradura(NFA, [relacion[1]], visitados)
             elif(len(relaciones) != 0):
                 if (elemento == relaciones[0][0] and relaciones[0][2] =='ε'):
                     #print(relaciones[0][1])
-                    elementos += e_cerradura(NFA, [relaciones[0][1]])
+                    if (relaciones[0][1] in visitados):
+                        continue
+                    visitados.append(relaciones[0][1])
+                    elementos += e_cerradura(NFA, [relaciones[0][1]], visitados)
 
     return elementos
 

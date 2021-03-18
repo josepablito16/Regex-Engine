@@ -71,6 +71,7 @@ def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
 def generarSubConjuntos(NFA):
     print("\n SUBCONJUNTOS \n")
     lenguaje = t.getLenguaje(NFA)
+    print("Lenguaje: ",lenguaje)
     estados = {}
     estadosRevisados = [] # los estados que ya se revisaron
     

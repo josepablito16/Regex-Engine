@@ -12,7 +12,7 @@ class Arbol(object):
     def __init__(self):
         self.pila = []
         self.operadores = ['|', '*','.']
-        self.numeros = ['a', 'b','ε','α','#']
+        self.numeros = list(map(str,range(0,10))) + ['ε','α','#'] + list(map(chr, range(ord('a'), ord('z')+1)))
         self.diccionario = {}
 
 
@@ -67,15 +67,6 @@ class Arbol(object):
 
                 self.pila.append(t.construirConcatenacion(NFA2, NFA1))
 
-            if(Node.getValue() == '^'):
-                num1 = self.pila[len(self.pila)-1]
-                num2 = self.pila[len(self.pila)-2]
-
-                self.pila.pop()
-                self.pila.pop()
-                #print(f"{num1} / {num2}")
-
-                self.pila.append(self.exp(float(num1), float(num2)))
 
         else:
             print(f"No Operador {Node.getValue()}")
@@ -130,10 +121,9 @@ class Arbol(object):
         # print("ECUACION")
         # print(self.ecuacion)
 
-    def interpretarEcuacion(self, entrada):
-        #entrada = preProcesarExpresion(entrada)
-        entrada = "(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))"
+    def interpretarEcuacion(self, entrada):        
         print(entrada)
+        print(self.numeros)
         root = Node(None)
         actual = root
 
@@ -215,5 +205,5 @@ class Arbol(object):
 		'''
         print("\n POSTORDEN")
         #self.postOrderDirecto(root)
-        d.construirFuncionesBasicas(root)
+        return d.construirFuncionesBasicas(root)
         #return self.pila[0]

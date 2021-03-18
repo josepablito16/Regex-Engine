@@ -7,22 +7,23 @@ import Subconjuntos as s
 a = Arbol()
 
 #entrada = "(a|b)*abb"
-entrada = "(ε|a*b)"
+#entrada = "(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))"
+'''
+((1?)*)*    =   (((1|ε)*α)*α)
+'''
+entrada = "(((1|ε)*α)*α)"
+
+
+cadena = "1"
+
 
 NFA = a.interpretarEcuacion(entrada)
 g.visualizarNFA(NFA)
-g.visualizarNFD(s.generarSubConjuntos(NFA))
+#g.visualizarNFD(s.generarSubConjuntos(NFA))
 
 
 # DFA directo
-#entrada = "((((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b)).#)"
+entrada = f"({entrada}.#)"
+#g.visualizarDirecto(a.armarArbol(entrada))
 
-#entrada = "((((a|ε)*α)*α).#)"
-
-#a.armarArbol(entrada)
-
-
-#(ba)+ = ((b.a).((b.a)*α))
-#((a.(b*α)).a)
-#(a|b)
 

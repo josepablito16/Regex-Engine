@@ -4,5 +4,5 @@ digraph finite_state_machine {
 	A
 	node [shape=circle]
 	A [color="#3F888F"]
-	A -> A [label=a]
+	A -> A [label=1]
 }

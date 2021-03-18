@@ -2,7 +2,7 @@ from Nodo import Node
 import NodoDirecto as nd
 import Grafo as g
 
-numeros = ['a', 'b','ε','#']
+numeros = list(map(str,range(0,10))) + ['ε','α','#'] + list(map(chr, range(ord('a'), ord('z')+1)))
 operadores = ['|', '*','.']
 contador = 1
 nodosHoja ={}
@@ -222,7 +222,8 @@ def construirFuncionesBasicas(nodo):
     """)
 
     DFA = construirDFA(nodo.getFirstPos())
-    g.visualizarDirecto(DFA)
+    return DFA
+    
 
     
     

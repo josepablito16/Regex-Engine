@@ -17,14 +17,17 @@ a = Arbol()
 '''
 entrada = "(((1|ε)*α)*α)"
 
-cadena = "abc"
+cadena = "10"
 
-
+# NFA
 NFA = a.interpretarEcuacion(entrada)
-print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
-
+#print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
 #g.visualizarNFA(NFA)
-#g.visualizarNFD(s.generarSubConjuntos(NFA))
+
+# NFD
+NFD = s.generarSubConjuntos(NFA)
+print(s.simularNFD(NFD, cadena))
+#g.visualizarNFD(NFD)
 
 
 # DFA directo

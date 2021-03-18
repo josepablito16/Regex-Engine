@@ -98,7 +98,23 @@ def generarSubConjuntos(NFA):
 
 
 
+def simularNFD(NFD, cadena):
+    print("SIMULAR NFD")
 
+    s = ns.getEstadosIniciales(NFD)[0]
+
+    for i in cadena:
+        if (s == []):
+            break
+        s = ns.mover(NFD[s],i)
+    
+
+    # Si la interseccion de S y los estados finales no es vacia
+    # Entonces se acepta la cadena
+    if (list(set.intersection(set(s),set(ns.getEstadosFinales(NFD)))) != []):
+        return "SI"
+    else:
+        return "NO"
 
 
 if __name__ == '__main__':

@@ -83,3 +83,14 @@ def getRelacionesNFD(NFD):
 def printNFDdebug(NFD):
     for id, nodo in NFD.items():
         print(f"{id} : {nodo.getEstados()}")
+
+def mover(estado,letra):
+    try:
+        for i in estado.getRelaciones():
+            if (i[2] == letra):
+                return i[1]
+    except:
+        return []
+    
+    return []
+

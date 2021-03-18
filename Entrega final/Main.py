@@ -18,8 +18,8 @@ cadena = "1"
 
 
 NFA = a.interpretarEcuacion(entrada)
-g.visualizarNFA(NFA)
-#g.visualizarNFD(s.generarSubConjuntos(NFA))
+#g.visualizarNFA(NFA)
+g.visualizarNFD(s.generarSubConjuntos(NFA))
 
 
 # DFA directo

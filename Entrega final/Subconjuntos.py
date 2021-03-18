@@ -37,7 +37,8 @@ def generarSubConjuntosIteracion(estadoPivote, NFA, estados, lenguaje):
         print(f"mover = {mover}")
 
         if (len(mover) > 0):
-            e_cerraduraTemp = list(set(t.e_cerradura(NFA, mover)))
+            e_cerraduraTemp, _ = t.e_cerradura(NFA, mover)
+            e_cerraduraTemp = list(set(e_cerraduraTemp))
             print(f"e_cerraduraTemp = {e_cerraduraTemp}")
             estadoControl, idEstado = isNuevoEstado(estados, e_cerraduraTemp)
             print(f"EstadoControl = {estadoControl}, idEstado = {idEstado}")
@@ -78,7 +79,9 @@ def generarSubConjuntos(NFA):
     idNodoInicial, _ = t.getIdNodoInicio(NFA)
 
     # e-cerradura del estado inicial
-    estados[nextLetraId()] = ns.NodoSubconjuntos(True, t.e_cerradura(NFA, [idNodoInicial]))
+    e_cerraduraTemp, _ = t.e_cerradura(NFA, [idNodoInicial])
+    
+    estados[nextLetraId()] = ns.NodoSubconjuntos(True,list(set(e_cerraduraTemp)))
 
 
     while (len(colaLetrasId) > 0):

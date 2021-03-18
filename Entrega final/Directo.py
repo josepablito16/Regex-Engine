@@ -226,4 +226,22 @@ def construirFuncionesBasicas(nodo):
     
 
     
+def simularDirecto(DFA, cadena):
+    print("SIMULAR Directo")
+
+    s = nd.getEstadosIniciales(DFA)[0]
+
+    print(s)
     
+    for i in cadena:
+        if (s == []):
+            break
+        s = nd.mover(DFA[s],i)
+    
+
+    # Si la interseccion de S y los estados finales no es vacia
+    # Entonces se acepta la cadena
+    if (list(set.intersection(set(s),set(nd.getEstadosFinales(DFA)))) != []):
+        return "SI"
+    else:
+        return "NO"

@@ -205,5 +205,5 @@ class Arbol(object):
 		'''
         print("\n POSTORDEN")
         #self.postOrderDirecto(root)
-        return d.construirFuncionesBasicas(root)
+        return root
         #return self.pila[0]

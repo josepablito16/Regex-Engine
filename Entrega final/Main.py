@@ -2,6 +2,7 @@ from Arbol import *
 import Thompson as t
 import Grafo as g
 import Subconjuntos as s
+import Directo as d
 
 
 a = Arbol()
@@ -17,7 +18,7 @@ a = Arbol()
 '''
 entrada = "(((1|ε)*α)*α)"
 
-cadena = "10"
+cadena = "1"
 
 # NFA
 NFA = a.interpretarEcuacion(entrada)
@@ -26,12 +27,15 @@ NFA = a.interpretarEcuacion(entrada)
 
 # NFD
 NFD = s.generarSubConjuntos(NFA)
-print(s.simularNFD(NFD, cadena))
+#print(s.simularNFD(NFD, cadena))
 #g.visualizarNFD(NFD)
 
 
 # DFA directo
 entrada = f"({entrada}.#)"
-#g.visualizarDirecto(a.armarArbol(entrada))
+DFA_directo = d.construirFuncionesBasicas(a.armarArbol(entrada))
+print(d.simularDirecto(DFA_directo, cadena))
+#g.visualizarDirecto(DFA_directo)
+
 
 

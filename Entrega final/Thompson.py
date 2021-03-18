@@ -184,6 +184,22 @@ def mover(NFA, estado, simbolo):
     return elementos
 
 
+def simularNFA(NFA, cadena):
+    idInicial, _ = getIdNodoInicio(NFA)
+    idFinal,_ = getIdNodoFin(NFA)
+
+    S, _ = e_cerradura(NFA, [idInicial])
+
+    for i in cadena:
+        S, _ = e_cerradura(NFA,mover(NFA, S, i))
+    
+    # Si la interseccion de S y los estados finales no es vacia
+    # Entonces se acepta la cadena
+    if (list(set.intersection(set(S),set([idFinal]))) != []):
+        return "SI"
+    else:
+        return "NO"
+
 
 
 

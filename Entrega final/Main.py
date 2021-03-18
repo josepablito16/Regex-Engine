@@ -1,5 +1,5 @@
 from Arbol import *
-from Thompson import *
+import Thompson as t
 import Grafo as g
 import Subconjuntos as s
 
@@ -15,25 +15,20 @@ a = Arbol()
 (1|0)+001   =   ((((((1|0)*α).(1|0)).0).0).1)
 (εa|εb)*abb =   ((((((ε.a)|(ε.b))*α).a).b).b)
 '''
-entrada = "((((((ε.a)|(ε.b))*α).a).b).b)"
+entrada = "(((1|ε)*α)*α)"
 
-
-
-
-
-
-
-
-cadena = "1"
+cadena = "abc"
 
 
 NFA = a.interpretarEcuacion(entrada)
-g.visualizarNFA(NFA)
-g.visualizarNFD(s.generarSubConjuntos(NFA))
+print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
+
+#g.visualizarNFA(NFA)
+#g.visualizarNFD(s.generarSubConjuntos(NFA))
 
 
 # DFA directo
 entrada = f"({entrada}.#)"
-g.visualizarDirecto(a.armarArbol(entrada))
+#g.visualizarDirecto(a.armarArbol(entrada))
 
 

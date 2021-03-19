@@ -22,20 +22,20 @@ cadena = "1"
 
 # NFA
 NFA = a.interpretarEcuacion(entrada)
-#print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
-#g.visualizarNFA(NFA)
+print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
+g.visualizarNFA(NFA)
 
 # NFD
 NFD = s.generarSubConjuntos(NFA)
-#print(s.simularNFD(NFD, cadena))
-#g.visualizarNFD(NFD)
+print(s.simularNFD(NFD, cadena))
+g.visualizarNFD(NFD)
 
 
 # DFA directo
 entrada = f"({entrada}.#)"
 DFA_directo = d.construirFuncionesBasicas(a.armarArbol(entrada))
 print(d.simularDirecto(DFA_directo, cadena))
-#g.visualizarDirecto(DFA_directo)
+g.visualizarDirecto(DFA_directo)
 
 
 

@@ -160,11 +160,11 @@ def e_cerradura(NFA, estado, visitados = []):
 
     return elementos, list(set(visitados))
 
-def getIdNodoInicio(NFA):
-    return nt.getIdInicial(NFA)
+def getIdNodoInicio(NFA, control = True):
+    return nt.getIdInicial(NFA, control)
 
-def getIdNodoFin(NFA):
-    return nt.getIdFinal(NFA)
+def getIdNodoFin(NFA, control = True):
+    return nt.getIdFinal(NFA, control)
 
 def mover(NFA, estado, simbolo):
     elementos = []
@@ -185,8 +185,8 @@ def mover(NFA, estado, simbolo):
 
 
 def simularNFA(NFA, cadena):
-    idInicial, _ = getIdNodoInicio(NFA)
-    idFinal,_ = getIdNodoFin(NFA)
+    idInicial, _ = getIdNodoInicio(NFA, False)
+    idFinal,_ = getIdNodoFin(NFA, False)
 
     S, _ = e_cerradura(NFA, [idInicial])
 

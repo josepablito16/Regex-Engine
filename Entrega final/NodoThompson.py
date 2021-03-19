@@ -92,16 +92,18 @@ def actualizarIdsNodos(NFA, idContador):
     return nuevoNFA, idContador
 
 
-def getIdInicial(NFA):
+def getIdInicial(NFA,control = True ):
     for id, nodo in NFA.items():
         if (nodo.isEstadoInicial()):
-            nodo.clearEstado()
+            if control:
+                nodo.clearEstado()
             return id, NFA
 
-def getIdFinal(NFA):
+def getIdFinal(NFA, control = True):
     for id, nodo in NFA.items():
         if (nodo.isEstadoFinal()):
-            nodo.clearEstado()
+            if control:
+                nodo.clearEstado()
             return id, NFA
 
 def actualizarRelacionConcatenacion(NFA, idNodo1, idNodo2):

@@ -1,4 +1,20 @@
 class NodoSubconjuntos(object):
+    """
+    Este objeto guarda toda la informacion de un nodo
+    especificamente para el algoritmo de generacion
+    de subconjuntos
+
+    Variable
+    ----------
+    relaciones : list
+        guarda una lista de objetos relacion del nodo
+    estadoFinal : Bool
+        es estado final?
+    estadoInicial : Bool
+        es estado inicial?
+    estados : lsit
+        ids de todos los estados que representa el nodo
+    """
     def __init__(self, estadoInicial, estados):
         self.relaciones = []
         self.estadoFinal = False
@@ -33,6 +49,19 @@ class NodoSubconjuntos(object):
 
 
 class RelacionSubconjuntos(object):
+    """
+    Este objeto guarda toda la informacion de una relacion
+    especificamente para el algoritmo directo
+
+    Variable
+    ----------
+    idNodo1 : int
+        id del nodo que posee la relacion
+    nombreRelacion : str
+        texto de la transicion de la relacion
+    idNodo2 : int
+        id del nodo a que se llega con la relacion
+    """
     def __init__(self, idNodo1, nombreRelacion, idNodo2):
         self.idNodo1 = idNodo1
         self.nombreRelacion = nombreRelacion

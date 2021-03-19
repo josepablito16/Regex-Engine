@@ -49,7 +49,7 @@ class NodoDirecto(object):
 
 class RelacionDirecto(object):
     """
-    Este objeto guarda toda la informacion de un nodo
+    Este objeto guarda toda la informacion de una relacion
     especificamente para el algoritmo directo
 
     Variable

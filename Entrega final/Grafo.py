@@ -67,10 +67,10 @@ def visualizarNFD(NFD, nombre="NFD_Actual"):
             
             if len(relacion) > 1:
                 for subRelacion in relacion:
-                    print(subRelacion)
+                    
                     f.edge(str(subRelacion[0]), str(subRelacion[1]), label=str(subRelacion[2]))
             else:
-                print(relacion)
+            
                 f.edge(str(relacion[0][0]), str(relacion[0][1]), label=str(relacion[0][2]))
         except:
             pass
@@ -101,10 +101,10 @@ def visualizarDirecto(DFA, nombre="DFA_Directo_Actual"):
             
             if len(relacion) > 1:
                 for subRelacion in relacion:
-                    print(subRelacion)
+                    
                     f.edge(str(subRelacion[0]), str(subRelacion[1]), label=str(subRelacion[2]))
             else:
-                print(relacion)
+                
                 f.edge(str(relacion[0][0]), str(relacion[0][1]), label=str(relacion[0][2]))
         except:
             pass

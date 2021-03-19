@@ -1,7 +1,16 @@
 import NodoThompson as nt
 import Grafo as g
 
+'''
+    Este script contiene funciones utiles para 
+    el algoritmo de Thompson
+'''
+
+
 def construirUnSimbolo(simbolo):
+    '''
+    Construccion de NFA dado un simbolo
+    '''
     NFA = {}
     NFA[1] = nt.NodoThompson(True, False)
     NFA[2] = nt.NodoThompson(False, True)
@@ -11,6 +20,10 @@ def construirUnSimbolo(simbolo):
     
 
 def construirOr(NFA1, NFA2):
+    '''
+    Construccion de NFA dado dos NFAS
+    Regla Or
+    '''
     # Se crea el NFA y su estado inicial
     NFA = {}
     NFA[1] = nt.NodoThompson(True, False)
@@ -35,10 +48,8 @@ def construirOr(NFA1, NFA2):
     # Join de NFAs
     NFA.update(NFA2)
     NFA.update(NFA1)
-    #print(f"NFA = {NFA}")
 
     # Se crean las relaciones del nodo inicial
-    #print(f"Id Iniciales {[idInicial1, idInicial2]}")
     NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial1))
     NFA[1].agregarRelacion(nt.RelacionThompson(1, "ε", idInicial2))
 
@@ -54,6 +65,10 @@ def construirOr(NFA1, NFA2):
 
     
 def construirKleen(NFA1):
+    '''
+    Construccion de NFA dado un NFA
+    Regla Kleen Star
+    '''
     # Se crea el NFA y su estado inicial
     NFA = {}
     NFA[1] = nt.NodoThompson(True, False)
@@ -86,6 +101,10 @@ def construirKleen(NFA1):
 
 
 def construirConcatenacion(NFA1, NFA2):
+    '''
+    Construccion de NFA dado dos NFAS
+    Regla concatenacion
+    '''
     # Se crea el NFA
     NFA = {}
 
@@ -111,6 +130,9 @@ def construirConcatenacion(NFA1, NFA2):
     return NFA
 
 def getLenguaje(NFA):
+    '''
+        Se obtiene el lenguaje del NFA
+    '''
     lenguaje = []
     for nodo in NFA.values():
         relaciones = nodo.getRelaciones()
@@ -129,28 +151,51 @@ def getLenguaje(NFA):
 
 
 def e_cerradura(NFA, estado, visitados = []):
+    '''
+        Calcula e_cerradura
+        
+        Parametros
+        ----------
+        NFA: dict
+            diccionario que contiene la informacion del NFA
+        
+        estado: list
+            Estado dado para calcular e_cerradura
+        
+        visitados : list
+            Nodos visitados para evitar recursividad infinita por relaciones epsilon
+
+    '''
     elementos = []
     elementos += estado
 
     visitados = list(set(visitados))
     
+    # se iteran los ids del estado dado
     for elemento in estado:
-        #print(visitados)
+        # se busca si este nodo tiene una relacion epsilon
         for nodo in NFA.values():
             relaciones = nodo.getRelaciones()
             if (len(relaciones) > 1):
                 for relacion in relaciones:
                     if (elemento == relacion[0] and relacion[2] =='ε'):
-                        #print(relacion[1])
+                        
+                        # Si tiene una relacion epsilon
+                        # pero ya se visito ese nodo se pasa a la 
+                        # siguiente iteracion
                         if (relacion[1] in visitados):
                             continue
+                        
+                        # Caso contrario se agrega a los visitados y se calcula
+                        # e_cerradura de ese nuevo nodo
                         visitados.append(relacion[1])
                         elementosTemp, visitadosTemp = e_cerradura(NFA, [relacion[1]], visitados)
                         visitados = list(set(visitadosTemp))
                         elementos += elementosTemp
             elif(len(relaciones) != 0):
                 if (elemento == relaciones[0][0] and relaciones[0][2] =='ε'):
-                    #print(relaciones[0][1])
+                    
+                    # Mismo caso que lo explicado anteriormente 
                     if (relaciones[0][1] in visitados):
                         continue
                     visitados.append(relaciones[0][1])
@@ -167,19 +212,38 @@ def getIdNodoFin(NFA, control = True):
     return nt.getIdFinal(NFA, control)
 
 def mover(NFA, estado, simbolo):
+    '''
+        Calcula mover
+        
+        Parametros
+        ----------
+        NFA: dict
+            diccionario que contiene la informacion del NFA
+        
+        estado: list
+            Estado dado para calcular e_cerradura
+        
+        simbolo : str
+            simbolo de la relacion que nos interesa
+
+    '''
     elementos = []
     
+    # Itera los ids del estado dado
     for elemento in estado:
+
+        # se busca si ese nodo tiene una relacion del
+        # simbolo dado
         for nodo in NFA.values():
             relaciones = nodo.getRelaciones()
             if (len(relaciones) > 1):
                 for relacion in relaciones:
                     if (elemento == relacion[0] and relacion[2] == simbolo):
-                        #print(relacion[1])
+                        
                         elementos.append(relacion[1])
             elif(len(relaciones) != 0):
                 if (elemento == relaciones[0][0] and relaciones[0][2] == simbolo):
-                    #print(relaciones[0][1])
+                
                     elementos.append(relaciones[0][1])
     return elementos
 

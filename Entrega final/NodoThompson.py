@@ -1,4 +1,17 @@
 class NodoThompson(object):
+    """
+    Este objeto guarda toda la informacion de un nodo
+    especificamente para el algoritmo Thompson
+
+    Variable
+    ----------
+    relaciones : list
+        guarda una lista de objetos relacion del nodo
+    estadoFinal : Bool
+        es estado final?
+    estadoInicial : Bool
+        es estado inicial?
+    """
     def __init__(self, estadoInicial, estadoFinal):
         self.relaciones = []
         self.estadoFinal = estadoFinal
@@ -40,6 +53,19 @@ class NodoThompson(object):
 
 
 class RelacionThompson(object):
+    """
+    Este objeto guarda toda la informacion de una relacion
+    especificamente para el algoritmo Thompson
+
+    Variable
+    ----------
+    idNodo1 : int
+        id del nodo que posee la relacion
+    nombreRelacion : str
+        texto de la transicion de la relacion
+    idNodo2 : int
+        id del nodo a que se llega con la relacion
+    """
     def __init__(self, idNodo1, nombreRelacion, idNodo2):
         self.idNodo1 = idNodo1
         self.nombreRelacion = nombreRelacion
@@ -79,6 +105,8 @@ def getRelacionesNFA(NFA):
 
 
 def actualizarIdsNodos(NFA, idContador):
+    # Actualiza los ids de todos los nodos de NFA
+    # respecto a un id inicial
     diccionarioId = {}
     nuevoNFA = {}
     for idViejo, nodoViejo in NFA.items():
@@ -107,6 +135,7 @@ def getIdFinal(NFA, control = True):
             return id, NFA
 
 def actualizarRelacionConcatenacion(NFA, idNodo1, idNodo2):
+    # Actualiza los ids de los nodos especificados luego de concatenar
     for id, nodo in NFA.items():
         try:
             nodo.actualizarRelaciones({idNodo2 : idNodo1})

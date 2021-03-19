@@ -1,8 +1,15 @@
 digraph finite_state_machine {
 	rankdir=LR size="8,5"
 	node [shape=doublecircle]
-	A
+	D
 	node [shape=circle]
 	A [color="#3F888F"]
-	A -> A [label=1]
+	A -> B [label=a]
+	A -> A [label=b]
+	B -> B [label=a]
+	B -> C [label=b]
+	C -> B [label=a]
+	C -> D [label=b]
+	D -> B [label=a]
+	D -> A [label=b]
 }

@@ -3,6 +3,7 @@ import Thompson as t
 import Grafo as g
 import Subconjuntos as s
 import Directo as d
+import time
 
 '''
 Main del proyecto, se utilizan todos
@@ -22,25 +23,43 @@ a = Arbol()
 (1|0)+001   =   ((((((1|0)*α).(1|0)).0).0).1)
 (εa|εb)*abb =   ((((((ε.a)|(ε.b))*α).a).b).b)
 '''
-entrada = "(((1|ε)*α)*α)"
+entrada = input("Escriba una expresion regular: ")
 
-cadena = "1"
+cadena = input("Ingresa la palabra a validar: ")
+
+print(f'''
+    Expr = {entrada}
+    Cadena = {cadena}
+''')
 
 # NFA
 NFA = a.interpretarEcuacion(entrada)
-print(f"Simulacion NFA = {t.simularNFA(NFA, cadena)}")
+start_time = time.time()
+print(f"""
+    Simulacion NFA = {t.simularNFA(NFA, cadena)}
+    Tiempo simulacion NFA = {(time.time() - start_time)}
+    """)
 g.visualizarNFA(NFA)
 
 # NFD
 NFD = s.generarSubConjuntos(NFA)
-print(s.simularNFD(NFD, cadena))
+start_time = time.time()
+print(f"""
+    Simulacion NFD = {s.simularNFD(NFD, cadena)}
+    Tiempo simulacion NFD = {(time.time() - start_time)}
+    """)
 g.visualizarNFD(NFD)
 
 
 # DFA directo
 entrada = f"({entrada}.#)"
 DFA_directo = d.construirFuncionesBasicas(a.armarArbol(entrada))
-print(d.simularDirecto(DFA_directo, cadena))
+
+start_time = time.time()
+print(f"""
+    Simulacion DFA = {d.simularDirecto(DFA_directo, cadena)}
+    Tiempo simulacion DFA = {(time.time() - start_time)}
+    """)
 g.visualizarDirecto(DFA_directo)
 
 

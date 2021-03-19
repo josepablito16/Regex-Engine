@@ -2,6 +2,36 @@ from Nodo import Node
 import NodoDirecto as nd
 import Grafo as g
 
+"""
+Script con funciones utiles para el algoritmo
+directo
+
+Variable
+----------
+contador : int
+    se usa como id para las hojas
+
+operadores : list
+    Operadores aceptados por el programa
+numeros : list
+    Contiene todos los simbolos aceptados por
+    el programa
+
+nodosHoja : dict
+    Guarda los nodos de las hojas del arbol
+
+followPos : dict
+    Guarda followPos para cada uno de los elementos
+
+letrasId : list
+    Tiene todas las letras mayusculas de A - Z
+    Se usa para los identificadores del grafo
+
+colaLetrasId : list
+    Contiene los estados en cola para el algoritmo
+
+"""
+
 numeros = list(map(str,range(0,10))) + ['ε','α','#'] + list(map(chr, range(ord('a'), ord('z')+1)))
 operadores = ['|', '*','.']
 contador = 1
@@ -13,6 +43,10 @@ colaLetrasId =[]
 
 
 def compararEstados(idsValidos, estadosCreados):
+    '''
+    Compara dos listas, retorna si son iguales True
+    sino False
+    '''
     for estado in estadosCreados:
         if(
             list(set(idsValidos) - set(estado))
@@ -25,14 +59,25 @@ def compararEstados(idsValidos, estadosCreados):
     return False
 
 def nextLetraId():
+    '''
+    Retorna la siguiente letra y la 
+    agrega a la cola para evaluarla luego
+    '''
     nextLetra = letrasId.pop(0)
     colaLetrasId.append(nextLetra)
     return nextLetra
 
 def union(lista):
+    '''
+    Quita elementos repetidos de una lista
+    '''
     return list(set(lista))
 
 def postOrder(Node):
+    '''
+    Recorre el arbol postOrden para calcular
+    nullable, firstpos y lastPos
+    '''
     if(Node == None):
         return
 
@@ -159,6 +204,11 @@ def calcularFirstLastPosHoja(nodo):
  
 
 def construirDFA(estadoInicial):
+    '''
+    Funcion para construir DFA con el algoritmo
+    Directo
+    '''
+
     pilaDeEstados=[estadoInicial]
     estadosCreados = [estadoInicial]
     DFA = {}
@@ -168,8 +218,7 @@ def construirDFA(estadoInicial):
     while len(pilaDeEstados) > 0:
         estadoActual = pilaDeEstados.pop()
         letraActual = colaLetrasId.pop()
-        print()
-        print(f"EN EL ESTADO : {estadoActual}")
+        
         for letra, ids in nodosHoja.items():
             if (letra =="#"):
                 continue
@@ -194,18 +243,11 @@ def construirDFA(estadoInicial):
 
                 # crear relacion con nuevo estado
                 DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].agregarRelacion(nd.RelacionDirecto(nd.getLetraDeEstados(DFA, list(set(estadoActual))), letra, letraTemp))
-                print("NUEVO ESTADO")
-                print(f"{DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].getEstados()} -> {letra} -> {DFA[letraTemp].getEstados()}")
+        
             else:
                 # crear relacion con un estado existente
-                print("ESTADO EXISTENTE")
-                print(f"{DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].getEstados()} -> {letra} -> {DFA[nd.getLetraDeEstados(DFA, list(set(idsValidos)))].getEstados()}")
                 DFA[nd.getLetraDeEstados(DFA, list(set(estadoActual)))].agregarRelacion(nd.RelacionDirecto(nd.getLetraDeEstados(DFA, list(set(estadoActual))), letra, nd.getLetraDeEstados(DFA, list(set(idsValidos)))))
 
-
-    print()
-    for id, nodo in DFA.items():
-        print(f" {id} = {nodo.getEstados()}")
     
     # Revisar estados finales
     DFA = nd.setEstadosFinales(DFA, contador - 1)
@@ -214,12 +256,11 @@ def construirDFA(estadoInicial):
 
 
 def construirFuncionesBasicas(nodo):
-    postOrder(nodo)
+    '''
+    Recorre el arbol y calcula las funciones basicas
+    '''
 
-    print(f"""
-    nodosHoja = {nodosHoja}
-    followPos = {followPos}
-    """)
+    postOrder(nodo)
 
     DFA = construirDFA(nodo.getFirstPos())
     return DFA
@@ -227,11 +268,11 @@ def construirFuncionesBasicas(nodo):
 
     
 def simularDirecto(DFA, cadena):
-    print("SIMULAR Directo")
+    '''
+    Simula DFA dada una cadena
+    '''
 
     s = nd.getEstadosIniciales(DFA)[0]
-
-    print(s)
     
     for i in cadena:
         if (s == []):

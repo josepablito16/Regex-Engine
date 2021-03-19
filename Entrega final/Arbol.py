@@ -7,7 +7,23 @@ import Directo as d
 
 
 class Arbol(object):
-    """docstring for Arbol"""
+    """
+    El objeto Arbol contiene metodos utiles
+    para construir un arbol y recorrerlo.
+
+    Variable
+    ----------
+    pila : list
+        guarda la cola de objetos antes de
+        llegar a un operador y construir los
+        nodos del arbol
+    operadores : list
+        Operadores aceptados por el programa
+    numeros : list
+        Contiene todos los simbolos aceptados por
+        el programa
+
+    """
 
     def __init__(self):
         self.pila = []
@@ -17,23 +33,36 @@ class Arbol(object):
 
 
     def postOrder(self, Node):
+        '''
+        Recorre el arbol de forma postoperden
+        y va construyendo los NFA usando el 
+        algoritmo de Thompson
+
+        Parametros
+        ----------
+        Node: Obj Node
+            Nodo raiz del arbol
+
+        '''
+
+        # Si no existe raiz no seguimos
         if(Node == None):
             return
 
+        # Ejecutamos postOrden en los nodos hijos
         self.postOrder(Node.getLeft())
         self.postOrder(Node.getRight())
 
         if(Node.getValue() in self.operadores):
-            print(f" Operador {Node.getValue()}")
+            
 
-            # Operadores
+            # Si el nodo actual es un Operadores
             if(Node.getValue() == '|'):
                 NFA1 = self.pila[len(self.pila)-1]
                 NFA2 = self.pila[len(self.pila)-2]
 
                 self.pila.pop()
                 self.pila.pop()
-                #print(f"{num1} + {num2}")
 
                 self.pila.append(t.construirOr(NFA1, NFA2))
 
@@ -41,11 +70,8 @@ class Arbol(object):
                 NFA1 = self.pila[len(self.pila)-1]
                 NFA2 = self.pila[len(self.pila)-2]
 
-                
-
                 self.pila.pop()
                 self.pila.pop()
-                #print(f"{num1} - {num2}")
 
                 self.pila.append(t.construirKleen(NFA2))
 
@@ -54,156 +80,109 @@ class Arbol(object):
                 NFA1 = self.pila[len(self.pila)-1]
                 NFA2 = self.pila[len(self.pila)-2]
                 
-                print()
-                print("PRESTAR ATENCION")
-
-                print(NFA1)
-                print(NFA2)
-                print()
 
                 self.pila.pop()
                 self.pila.pop()
-                #print(f"{num1} / {num2}")
 
                 self.pila.append(t.construirConcatenacion(NFA2, NFA1))
 
 
         else:
-            print(f"No Operador {Node.getValue()}")
+            # Si el nodo actual no es un operador
             self.pila.append(t.construirUnSimbolo(Node.getValue()))
-        # print("ECUACION")
-        # print(self.ecuacion)
-
-    def postOrderDirecto(self, Node):
-        if(Node == None):
-            return
-
-        self.postOrderDirecto(Node.getLeft())
-        self.postOrderDirecto(Node.getRight())
-
-        if(Node.getValue() in self.operadores):
-            print(Node.getValue())
-            #print(f" Operador {Node.getValue()}")
-
-            # Operadores
-            if(Node.getValue() == '|'):
-                num1 = self.pila[len(self.pila)-1]
-                num2 = self.pila[len(self.pila)-2]
-
-                self.pila.pop()
-                self.pila.pop()
-                #print(f"{num1} | {num2}")
-                self.pila.append(f"({num1} | {num2})")
-
-            if(Node.getValue() == '*'):
-                num1 = self.pila[len(self.pila)-1]
-                num2 = self.pila[len(self.pila)-2]
-
-                self.pila.pop()
-                self.pila.pop()
-                #print(f"{num2}*")
-                self.pila.append(f"{num2}*")
 
 
-            if(Node.getValue() == '.'):
-                num1 = self.pila[len(self.pila)-1]
-                num2 = self.pila[len(self.pila)-2]
-                
-                self.pila.pop()
-                self.pila.pop()
-                #print(f"{num1} . {num2}")
-                self.pila.append(f"{num1} . {num2}")
+    def interpretarEcuacion(self, entrada):      
+        '''
+        Recorre la expr y arma el arbol
 
-        else:
-            print(Node.getValue())
-            #print(f"No Operador {Node.getValue()}")
-            self.pila.append(Node.getValue())
-        # print("ECUACION")
-        # print(self.ecuacion)
+        Parametros
+        ----------
+        entrada: str
+            Expr ingresada
+        
+        Returns
+        ----------
+            NFA
 
-    def interpretarEcuacion(self, entrada):        
-        print(entrada)
-        print(self.numeros)
+
+        '''  
         root = Node(None)
         actual = root
 
-        print("Se arma el arbol")
+        # Se arma el arbol
         for i in entrada:
-            print(f"\nElemento : {i}")
             if(i == '('):
-                print("Se crea nodo izquiedo")
-                print("Se mueve al nodo izquierdo")
+                # Se crea nodo izquiedo
+                # Se mueve al nodo izquierdo
                 actual.setLeft(None, actual)
                 actual = actual.getLeft()
 
             if(i in self.operadores):
-                print(f"Se pone el valor al nodo: {i}")
-                print("Se crea nodo derecho")
-                print("Se mueve al nodo derecho")
+                # Se pone el valor al nodo: {i}
+                # Se crea nodo derecho
+                # Se mueve al nodo derecho
                 actual.setValue(i)
                 actual.setRight(None, actual)
                 actual = actual.getRight()
 
             if(i in self.numeros):
-                print(f"Se pone el valor al nodo: {i}")
-                print("Se mueve a la raiz del nodo")
+                # Se pone el valor al nodo: {i}
+                # Se mueve a la raiz del nodo
                 actual.setValue(i)
                 actual = actual.getRoot()
 
             if(i == ')'):
-                print("Se mueve a la raiz del nodo")
+                # Se mueve a la raiz del nodo
                 actual = actual.getRoot()
-        '''
-		print("Esta es")
-		print(root.getValue())
-		print(root.getLeft().getValue())
-		print(root.getLeft().getLeft().getValue())
-		'''
-        # print("postOrder")
+
         self.postOrder(root)
         return self.pila[0]
 
     def armarArbol(self, entrada):
-        #entrada = preProcesarExpresion(entrada)
-        #entrada = "((ε|((a*α).b)).#)"
-        #entrada = "((((((a|b)*α).a).b).b).#)"
-        print(entrada)
+        '''
+        Recorre la expr aumentada y 
+        arma el arbol para el algoritmo directo
+
+        Parametros
+        ----------
+        entrada: str
+            Expr ingresada
+        
+        Returns
+        ----------
+            Nodo raiz
+
+
+        '''
         root = Node(None)
         actual = root
 
-        print("Se arma el arbol")
+        # Se arma el arbol
         for i in entrada:
-            print(f"\nElemento : {i}")
+            
             if(i == '('):
-                print("Se crea nodo izquiedo")
-                print("Se mueve al nodo izquierdo")
+                # Se crea nodo izquiedo
+                # Se mueve al nodo izquierdo
                 actual.setLeft(None, actual)
                 actual = actual.getLeft()
 
             if(i in self.operadores):
-                print(f"Se pone el valor al nodo: {i}")
-                print("Se crea nodo derecho")
-                print("Se mueve al nodo derecho")
+                # Se pone el valor al nodo: {i}
+                # Se crea nodo derecho
+                # Se mueve al nodo derecho
                 actual.setValue(i)
                 actual.setRight(None, actual)
                 actual = actual.getRight()
 
             if(i in self.numeros):
-                print(f"Se pone el valor al nodo: {i}")
-                print("Se mueve a la raiz del nodo")
+                # Se pone el valor al nodo: {i}
+                # Se mueve a la raiz del nodo
                 actual.setValue(i)
                 actual = actual.getRoot()
 
             if(i == ')'):
-                print("Se mueve a la raiz del nodo")
+                # Se mueve a la raiz del nodo
                 actual = actual.getRoot()
-        '''
-		print("Esta es")
-		print(root.getValue())
-		print(root.getLeft().getValue())
-		print(root.getLeft().getLeft().getValue())
-		'''
-        print("\n POSTORDEN")
-        #self.postOrderDirecto(root)
+
         return root
-        #return self.pila[0]

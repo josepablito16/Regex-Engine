@@ -4,6 +4,12 @@ import Grafo as g
 import Subconjuntos as s
 import Directo as d
 
+'''
+Main del proyecto, se utilizan todos
+los scripts del proyecto para construir y simular
+NFA, NFD y DFA. Utilizando algoritmos de Thompson, 
+generacion de subconjuntos y directo
+'''
 
 a = Arbol()
 

@@ -100,14 +100,12 @@ def postOrder(Node):
             calcularFirstLastPosConcat(Node)
             calcularFollowPosConcat(Node)
         
-        
-        Node.info()
+    
 
     else:
         if (Node.getValue() in numeros):
             calcularFirstLastPosHoja(Node)
             calcularNullableHoja(Node)
-            Node.info()
 
 # Calculo de funciones concat
 def calcularNullableConcat(nodo):

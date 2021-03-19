@@ -1,4 +1,25 @@
 class Node(object):
+    """
+    Este objeto guarda toda la informacion de un nodo
+
+    Variable
+    ----------
+    value : str
+        guarda el valor del nodo, simbolo u operador
+    root : Node
+        referencia del padre del nodo
+    left : Node
+        hijo del nodo
+    right : Node
+        hijo del nodo
+    nullable: bool
+        es nullable?
+    firstPos : list
+        guarda las primeras posiciones del nodo
+    lastPos : list
+        guarda las ultimas posiciones del nodo
+
+    """
     def __init__(self, value, root=None):
         self.value = value
         if(root):
@@ -58,14 +79,3 @@ class Node(object):
         FirstPos = {self.firstPos}
         LastPos = {self.lastPos}
         """)
-
-
-# MAAAIN
-'''
-root=Node(None)
-root.setLeft('+',root)
-
-actual=root.getLeft()
-actual=actual.getRoot()
-print(actual.getValue())
-'''

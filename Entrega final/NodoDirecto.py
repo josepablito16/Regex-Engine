@@ -1,4 +1,19 @@
 class NodoDirecto(object):
+    """
+    Este objeto guarda toda la informacion de un nodo
+    especificamente para el algoritmo directo
+
+    Variable
+    ----------
+    relaciones : list
+        guarda una lista de objetos relacion del nodo
+    estadoFinal : Bool
+        es estado final?
+    estadoInicial : Bool
+        es estado inicial?
+    estados : lsit
+        ids de todos los estados que representa el nodo
+    """
     def __init__(self,estados,estadoInicial = False):
         self.relaciones = []
         self.estadoFinal = False
@@ -33,6 +48,19 @@ class NodoDirecto(object):
 
 
 class RelacionDirecto(object):
+    """
+    Este objeto guarda toda la informacion de un nodo
+    especificamente para el algoritmo directo
+
+    Variable
+    ----------
+    idNodo1 : int
+        id del nodo que posee la relacion
+    nombreRelacion : str
+        texto de la transicion de la relacion
+    idNodo2 : int
+        id del nodo a que se llega con la relacion
+    """
     def __init__(self, idNodo1, nombreRelacion, idNodo2):
         self.idNodo1 = idNodo1
         self.nombreRelacion = nombreRelacion
@@ -50,8 +78,10 @@ class RelacionDirecto(object):
 
 
 # Funciones complementarias
-
 def getLetraDeEstados(DFA, estados):
+    '''
+    Retorna la letra que le corresponde a un estado
+    '''
     for letra, nodo in DFA.items():
         if(
             list(set(nodo.getEstados()) - set(estados))
@@ -86,12 +116,19 @@ def getRelacionesDFA(DFA):
     return relaciones
 
 def setEstadosFinales(DFA, idHash):
+    '''
+    Dado un DFA pone todos los nodos estado final
+    que contengan un id dado
+    '''
     for id, nodo in DFA.items():
         if (idHash in nodo.getEstados()):
             nodo.setEstadoFinal()
     return DFA
 
 def mover(estado,letra):
+    '''
+    Funcion mover utilizado para la simulacion
+    '''
     try:
         for i in estado.getRelaciones():
             if (i[2] == letra):

@@ -4,7 +4,10 @@ def isLiteral(char):
     return char.isalpha() or char.isdigit() or char in ['ε','α']
 
 def isOperador(char):
-    return char in ['|','+','?','*']
+    return char in ['|','+','?','*','.']
+
+def isParentesis(char):
+    return char in ['(',')']
 
 def agregarKleenStar(expresion):
     if(isLiteral(expresion[-1])):
@@ -160,20 +163,39 @@ def preProcesarExpresion(operacion):
     return lista
     
 
+def isError(cadena):
+    parentesisAbiertos = 0
+    parentesisCerrados = 0
+
+    
+    for i in cadena:
+        if not(isLiteral(i) or isOperador(i) or isParentesis(i)):
+            print(f"\033[1;31;40m Operador invalido: {i}")
+            return True
+        if (i == "("):
+            parentesisAbiertos += 1
+        if (i == ")"):
+            parentesisCerrados += 1
+    
+    if (parentesisAbiertos != parentesisCerrados):
+        print("\033[1;31;40m Paréntesis no equilibrados")
+        return True
+    
+    return False
 
 
 
 if __name__ == '__main__':
-    entradaOriginal = "a(ba)+|(a(b)*a)|(a|b)" 
-    entradaFinal = '(((a.((b.a).((b.a)*α)))|((a.(b*α)).a))|(a|b))'
+    '''
+    (a|b*a(a|b)(a|b)+   =   ((((a|(b*α).a).(a|b)).(((a|b)*α).(a|b)))
+    ((1?)** =   ((1|ε)**
+    (a|ε)b(a+c? =   ((((a|ε).b).((a*α).a).(c|ε))
+    (εa|εb)*ab)b    =   (((((ε.a)|(ε.b))*α).a.b)).b)
+    (a-b)
+    (a.(a/b))
+    '''
+    cadena = '(a-b)'
+    print(isError(cadena))
 
-    entradaPreprocesada = preProcesarExpresion(entradaOriginal)
-    print(entradaPreprocesada)
-
-
-
-
-    #print(list(entradaFinal))
-    print(entradaPreprocesada == entradaFinal)
 
 

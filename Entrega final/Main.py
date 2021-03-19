@@ -3,7 +3,9 @@ import Thompson as t
 import Grafo as g
 import Subconjuntos as s
 import Directo as d
+import Preprocesador as p
 import time
+import sys
 
 '''
 Main del proyecto, se utilizan todos
@@ -22,10 +24,23 @@ a = Arbol()
 (a|ε)b(a+)c?    =   ((((a|ε).b).((a*α).a)).(c|ε))
 (1|0)+001   =   ((((((1|0)*α).(1|0)).0).0).1)
 (εa|εb)*abb =   ((((((ε.a)|(ε.b))*α).a).b).b)
+
+CON ERRORES
+(a|b*a(a|b)(a|b)+   =   ((((a|(b*α).a).(a|b)).(((a|b)*α).(a|b)))
+((1?)** =   ((1|ε)**
+(a|ε)b(a+c? =   ((((a|ε).b).((a*α).a).(c|ε))
+(εa|εb)*ab)b    =   (((((ε.a)|(ε.b))*α).a.b)).b)
+(a-b)
+(a.(a/b))
 '''
 entrada = input("Escriba una expresion regular: ")
 
 cadena = input("Ingresa la palabra a validar: ")
+
+
+if (p.isError(entrada)):
+
+    sys.exit()
 
 print(f'''
     Expr = {entrada}

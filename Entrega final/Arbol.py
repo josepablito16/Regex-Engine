@@ -1,7 +1,6 @@
 from Nodo import Node
 from itertools import product
 from Preprocesador import preProcesarExpresion
-import numpy as np
 import Thompson as t
 import Directo as d
 
